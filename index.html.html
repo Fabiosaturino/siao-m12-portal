@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ministério Apostólico Sião — Portal M12</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg:#3d3d3d;--bg2:#2d2d2d;--bg3:#353535;--white:#fff;--dark:#1a1a1a;--muted:#666;--border:#e0e0e0;--input-bg:#f5f5f5;--light-bg:#f0f0f0}
+        body{font-family:'Montserrat',sans-serif;background:var(--bg);min-height:100vh;color:var(--dark)}
+
+        /* FLOATING ANIMATION */
+        @keyframes float{
+            0%,100%{transform:translateY(0)}
+            50%{transform:translateY(-6px)}
+        }
+        .float-logo{animation:float 3s ease-in-out infinite}
+        .float-logo:nth-child(2){animation-delay:.5s}
+
+        /* ===== SPLASH / COVER PAGE ===== */
+        .splash-page{
+            min-height:100vh;display:flex;flex-direction:column;
+            align-items:center;justify-content:center;padding:40px 20px;
+            background:var(--bg);position:relative;overflow:hidden;
+        }
+        .splash-page::before{
+            content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+            background:radial-gradient(ellipse at 50% 30%,rgba(255,255,255,.06) 0%,transparent 70%);
+            pointer-events:none;
+        }
+        .splash-logos{
+            display:flex;flex-direction:column;align-items:center;gap:16px;
+            position:relative;z-index:1;margin-bottom:40px;
+        }
+        .splash-logos img:first-child{opacity:.95}
+        .splash-logos img:last-child{height:65px;opacity:.85}
+        .splash-line{width:50px;height:2px;background:#fff;opacity:.2;border-radius:2px;margin:8px 0 24px;position:relative;z-index:1}
+        .splash-text{
+            color:#777;font-size:.7rem;letter-spacing:3px;text-transform:uppercase;
+            text-align:center;position:relative;z-index:1;margin-bottom:8px;
+        }
+        .splash-subtitle{
+            color:#555;font-size:.6rem;letter-spacing:2px;text-transform:uppercase;
+            text-align:center;position:relative;z-index:1;margin-bottom:48px;
+        }
+        .btn-welcome{
+            padding:14px 48px;background:transparent;border:1px solid rgba(255,255,255,.25);
+            color:#ccc;border-radius:8px;font-family:'Montserrat',sans-serif;
+            font-size:.8rem;font-weight:600;letter-spacing:2px;text-transform:uppercase;
+            cursor:pointer;transition:all .4s ease;position:relative;z-index:1;
+        }
+        .btn-welcome:hover{
+            background:#fff;color:#1a1a1a;border-color:#fff;
+            transform:translateY(-2px);box-shadow:0 8px 30px rgba(255,255,255,.1);
+        }
+        .splash-verse{
+            position:absolute;bottom:30px;text-align:center;
+            color:#555;font-size:.62rem;font-style:italic;line-height:1.6;
+            z-index:1;
+        }
+        .splash-verse strong{color:#777;font-style:normal}
+
+        /* Splash fade-out */
+        .splash-page.fade-out{
+            opacity:0;transform:scale(1.02);
+            transition:all .5s ease;pointer-events:none;
+        }
+
+        /* LOGIN PAGE */
+        .login-page{min-height:100vh;display:none;flex-direction:column;align-items:center;justify-content:center;padding:20px}
+        .login-logo{margin-bottom:36px;text-align:center}
+        .login-logo img{opacity:.9}
+        .login-container{background:var(--bg2);border-radius:12px;width:100%;max-width:420px;border:1px solid rgba(255,255,255,.08);overflow:hidden}
+
+
+
+
+
+
+
+
+
+
+        .tab-title{color:var(--white);font-size:.9rem;font-weight:600;text-align:center;margin-bottom:20px;letter-spacing:.5px}
+
+        .form-field{margin-bottom:14px}
+        .form-field label{display:block;color:#aaa;font-size:.68rem;font-weight:500;margin-bottom:4px;letter-spacing:.5px;text-transform:uppercase}
+        .form-field input,.form-field select,.form-field textarea{width:100%;padding:10px 13px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:7px;color:#fff;font-family:'Montserrat',sans-serif;font-size:.85rem;transition:all .3s}
+        .form-field input:focus,.form-field select:focus,.form-field textarea:focus{outline:none;border-color:rgba(255,255,255,.35);background:rgba(255,255,255,.1)}
+        .form-field input::placeholder,.form-field textarea::placeholder{color:#555}
+        .form-field select{color:#aaa}
+        .form-field select option{background:#2d2d2d;color:#fff}
+        .form-field textarea{min-height:60px;resize:vertical}
+
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        @media(max-width:480px){.form-row{grid-template-columns:1fr}}
+        @media(max-width:480px){#gestDetalhes [style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr !important}}
+
+        .btn-primary{width:100%;padding:12px;background:#fff;color:#1a1a1a;border:none;border-radius:8px;font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:6px}
+        .btn-primary:hover{background:#e0e0e0;transform:translateY(-1px)}
+        .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+        .btn-senior{width:100%;padding:12px;background:transparent;color:#aaa;border:1px solid rgba(255,255,255,.2);border-radius:8px;font-family:'Montserrat',sans-serif;font-size:.82rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;cursor:pointer;transition:all .3s;margin-top:6px}
+        .btn-senior:hover{border-color:#fff;color:#fff}
+
+        .alert{padding:10px;border-radius:7px;font-size:.75rem;margin-bottom:14px;text-align:center;display:none}
+        .alert-error{background:rgba(220,53,69,.15);border:1px solid rgba(220,53,69,.3);color:#ff6b6b}
+        .alert-success{background:rgba(40,167,69,.15);border:1px solid rgba(40,167,69,.3);color:#6bff8e}
+
+        .login-footer{text-align:center;margin-top:22px;color:#777;font-size:.68rem;font-style:italic;line-height:1.6;max-width:420px}
+        .login-footer strong{color:#aaa;font-style:normal}
+
+        /* Gerações buttons */
+        .gen-btns{display:flex;flex-direction:column;align-items:center;gap:8px;margin-bottom:20px}
+        .gen-row{display:flex;gap:8px;justify-content:center}
+        .gen-btn{padding:10px 14px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:#888;font-size:.7rem;font-weight:600;cursor:pointer;transition:all .3s}
+        @media(max-width:380px){.gen-btn{padding:8px 10px;font-size:.62rem}.gen-row{gap:5px}.gen-btns{gap:5px}}
+        .gen-btn:hover{border-color:rgba(255,255,255,.3);color:#ccc}
+        .gen-btn.active{background:#fff;color:#1a1a1a;border-color:#fff}
+
+        /* ===== DASHBOARD ===== */
+        .dashboard-page{display:none;min-height:100vh;background:var(--light-bg)}
+        .sr-header{background:var(--bg);padding:14px 24px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.08)}
+        .sr-header-left{display:flex;align-items:center;gap:12px}
+        .sr-header img{opacity:.9}
+        .sr-header-info{display:flex;flex-direction:column}
+        .sr-header-title{color:#fff;font-size:.8rem;font-weight:700;letter-spacing:1px}
+        .sr-header-sub{color:#888;font-size:.58rem;letter-spacing:.5px;margin-top:2px}
+        .sr-user{display:flex;align-items:center;gap:10px}
+        .sr-user-name{color:#ccc;font-size:.75rem}
+        .sr-user-badge{padding:3px 8px;border-radius:4px;font-size:.6rem;font-weight:700;background:#555;color:#fff}
+        .btn-logout{padding:6px 14px;background:transparent;border:1px solid rgba(255,255,255,.2);color:#aaa;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.65rem;font-weight:600;cursor:pointer;letter-spacing:.5px;transition:all .3s}
+        .btn-logout:hover{border-color:#fff;color:#fff}
+        @media(max-width:600px){.sr-header{flex-direction:column;gap:10px;text-align:center}.sr-user{justify-content:center}}
+
+        .sr-content{max-width:900px;margin:0 auto;padding:24px 16px 60px}
+        .sr-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+        @media(max-width:700px){.sr-stats{grid-template-columns:repeat(2,1fr)}}
+        @media(max-width:400px){.sr-stats{grid-template-columns:1fr}}
+        .stat-card{background:#fff;border-radius:10px;padding:20px;text-align:center;border:1px solid var(--border);box-shadow:0 1px 6px rgba(0,0,0,.05)}
+        .stat-num{font-size:1.8rem;font-weight:800;color:var(--dark)}
+        .stat-label{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:4px}
+
+        .sr-card{background:#fff;border-radius:10px;padding:24px;margin-bottom:16px;border:1px solid var(--border);box-shadow:0 1px 6px rgba(0,0,0,.05)}
+        .sr-card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;padding-bottom:10px;border-bottom:2px solid #1a1a1a}
+        .sr-card-title{font-size:.85rem;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:1px}
+        .btn-add{padding:8px 16px;background:var(--dark);color:#fff;border:none;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.7rem;font-weight:600;letter-spacing:.5px;cursor:pointer;transition:all .3s}
+        .btn-add:hover{background:#333}
+
+        .sr-filter{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+        .sr-filter select,.sr-filter input{padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.8rem;background:var(--input-bg)}
+        .sr-filter select:focus,.sr-filter input:focus{outline:none;border-color:#888}
+
+        .sr-table{width:100%;border-collapse:collapse;font-size:.78rem}
+        .sr-table th{background:var(--dark);color:#fff;padding:10px 12px;text-align:left;font-size:.68rem;font-weight:600;letter-spacing:.5px;text-transform:uppercase}
+        .sr-table td{padding:10px 12px;border-bottom:1px solid var(--border)}
+        .sr-table tr:hover td{background:#f7f7f7}
+        .sr-table .badge{display:inline-block;padding:3px 10px;border-radius:12px;font-size:.65rem;font-weight:600}
+        .badge-complete{background:#e8f5e9;color:#2e7d32}
+        .badge-progress{background:#fff3e0;color:#e65100}
+        .badge-new{background:#e3f2fd;color:#1565c0}
+        .badge-doze{background:#fce4ec;color:#c2185b}
+
+        .sr-table .actions{display:flex;gap:6px;flex-wrap:wrap}
+        .btn-action{padding:5px 10px;border:1px solid var(--border);background:#fff;border-radius:4px;font-size:.65rem;font-weight:600;cursor:pointer;transition:all .2s}
+        .btn-action:hover{background:var(--dark);color:#fff;border-color:var(--dark)}
+        .btn-action.btn-transfer{color:#1976d2;border-color:#1976d2}
+        .btn-action.btn-transfer:hover{background:#1976d2;color:#fff}
+        .btn-action.btn-promote{color:#388e3c;border-color:#388e3c}
+        .btn-action.btn-promote:hover{background:#388e3c;color:#fff}
+        .btn-action.btn-demote{color:#f57c00;border-color:#f57c00}
+        .btn-action.btn-demote:hover{background:#f57c00;color:#fff}
+        .btn-action.btn-remove{color:#d32f2f;border-color:#d32f2f}
+        .btn-action.btn-remove:hover{background:#d32f2f;color:#fff}
+
+        .sr-empty{text-align:center;padding:40px;color:var(--muted);font-size:.85rem}
+
+        /* Tabs Dashboard */
+        .db-tabs{display:flex;gap:4px;margin-bottom:24px;border-bottom:2px solid var(--border);overflow-x:auto;-webkit-overflow-scrolling:touch}
+        .db-tab{padding:12px 16px;background:transparent;border:none;font-family:'Montserrat',sans-serif;font-size:.72rem;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:all .3s;white-space:nowrap}
+        .db-tab:hover{color:var(--dark)}
+        .db-tab.active{color:var(--dark);border-bottom-color:var(--dark)}
+        .db-tab-content{display:none}
+        .db-tab-content.active{display:block}
+
+        /* Modal */
+        .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.7);display:none;align-items:center;justify-content:center;z-index:1000;padding:20px}
+        .modal-overlay.show{display:flex}
+        .modal{background:#fff;border-radius:12px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+        .modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+        .modal-title{font-size:.9rem;font-weight:700;color:var(--dark);text-transform:uppercase;letter-spacing:1px}
+        .modal-close{background:none;border:none;font-size:1.5rem;color:#999;cursor:pointer;line-height:1}
+        .modal-close:hover{color:var(--dark)}
+        .modal-body{padding:24px}
+        .modal-body .form-field label{color:var(--muted)}
+        .modal-body .form-field input,.modal-body .form-field select,.modal-body .form-field textarea{background:var(--input-bg);border-color:var(--border);color:var(--dark)}
+        .modal-body .form-field input::placeholder,.modal-body .form-field textarea::placeholder{color:#999}
+        .modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+        .btn-cancel{padding:10px 20px;background:transparent;border:1px solid var(--border);color:var(--muted);border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer}
+        .btn-cancel:hover{border-color:var(--dark);color:var(--dark)}
+        .btn-save{padding:10px 20px;background:var(--dark);color:#fff;border:none;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.75rem;font-weight:600;cursor:pointer}
+        .btn-save:hover{background:#333}
+
+        /* Footer */
+        .footer{text-align:center;padding:20px;background:var(--bg);border-top:1px solid rgba(255,255,255,.08)}
+        .footer-verse{color:#999;font-size:.72rem;font-style:italic;line-height:1.6}
+        .footer-ref{color:#bbb;font-size:.68rem;font-weight:600;margin-top:3px}
+        .footer-ministry{color:#555;font-size:.6rem;margin-top:10px;letter-spacing:1.5px;text-transform:uppercase}
+    </style>
+</head>
+<body>
+
+<!-- ===== SPLASH / COVER ===== -->
+<div class="splash-page" id="splashPage">
+    <div class="splash-logos">
+        <img class="float-logo" src="data:image/png;base64,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" alt="Sião" style="height:28px">
+        <img class="float-logo" src="data:image/png;base64,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" alt="M12">
+    </div>
+    <div class="splash-line"></div>
+    <div class="splash-text">Ministério Apostólico Sião</div>
+    <div class="splash-subtitle">Visão Celular M12 — Portal de Discipulado</div>
+    <button class="btn-welcome" id="btnWelcome">Seja Bem-Vindo</button>
+    <div class="splash-verse">
+        "Ide e fazei discípulos de todas as nações"<br>
+        <strong>Mateus 28:19</strong>
+    </div>
+</div>
+
+<!-- ===== LOGIN/CADASTRO ===== -->
+<div class="login-page" id="loginPage">
+    <div class="login-logo" style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;margin-bottom:36px">
+        <img class="float-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAF0AAAAeCAYAAABOvRIBAAAIvklEQVR42t2aa6xdVRHH/3POuW2tbVqK9EGNFkuQXIqVhEKJVRppS6EaC9gWJagfNAajRmIIEB8kSggmRsAHWB4GgmKDPEwUW60oLWIRsUiA0oLYRrBai1psb3vvef384Kxmutz73HPaS7hhJyt7n7Nnz1pr5j+PNWsZgF6b6yQz2wJUzKw9HDFgkmRmdEubrm6+OZL+er1qGqWXT7qSfibFABVJ5q1dpLDhBJXxTlc7fvdqCHtUCx2omllLUiv81yepamaDGW3lfzKyVhDoBFcKft9vZs1MoK2Cfmuu4BaQeAyaWeN1LXTAfNJHSVosaYmk4yXNlNQHbJf0oqTNkn5mZs8l4Tvqj5H0e0njXbBVSSskPeRCTZZxkaSVkgYl3S/pfjM74LxmStrkPC6WtDYAYUQm+Vpd/QGpAiw8fxbY2QWPQeAXwJIwnxnAUEa3JFiLgLsKeG0FPgUsATb5fwPAtDjO15vQq37/bqBpumAbQNtbAzhQINh7gSowHdgD1APdojDfDzh9G9gNbOswxq/EsY3Udbjaa7m/HFEfDnxa0icl1d0NVCWNdTeYgmdN0jhJY5wm+fgB/12TNElSX6AbExT8ead/VtIpkua6m9kahyTpZklX+zftbl1jap3o7DBSxhScRiplrPqkJkt6wQWmIOTrJK2R9B/v+xhJCyRd6AJLAj/RzF4Cxks62xVWlXSqpFvM7Dl3Lx+VtE/SU2b2TBaoF0iaKmm7mT3WS4aV+3ufl0lq/V8m1KNLaPn9R8COYPJH4l4SCs8LLqXpz1/rZB3AcuAl4KojcQPA+OTvCwRX2n/Bf2O9WSfaWo8IlyPuw5IukXSDpOYIZUHzvY924HdHUor3c9ACPAX8MfAbSQc8e2kBU0Pm0XJeq8xsQwy2kpZLerekOW5lSTi7JG2QdI+ZPRIyKgrcYU3SeZLeJ+lkt0JJegV4WtJaSfeZ2d5Dsp8ekNnw+2cCOrY60luOzvYRIP2boZ+E9I/FHNrRXSlCUEKXZy/1rK+z/d004Frg5S7HeIv3aYF/CvhnAo92wWMbcP4h4+3BrbSBp4E3uIajS2iMgHv5cshOktvaC1wKTCwIWDWg4i0KZbp/13Lht4Cl/m51cGHxGsqyoaFAc3foJwn8nKDYhtO3C3hGuXzioOC7FFAawPsD6lKqt87ffQn4Ww9+vj/Lned2UOCfgduAFcBb8xVpEnwQ+r5s3Anp8wLP54EvAIuB47wtBx4LQEuKWBX6mx+E3AxxrgVsdvTvD2lpMx+HehD42sy8Etq/CGz150t7QH5/EFqeo9eDu8pRuR94CLgcODlbwpcJfXGg+wZwmWc5RQHyjcBTYRwt4FfJKsO7KPD1wDsCj7cA1wVlpLnsBN40nNDTpOvA3JA1mAtrMvAi8C7/fyywJfj5boWe+FWB27P+G97qBQqoA/cBbw9up1ToSTHDVRaBK4KLwGNANXOnzSDwaszTA79rCjKyz6nL4Hl9hvJ0vwG4N6VLfl9W4je7KQOkSa8CNpZYXSO0dO0LLmRmJ6FngXgqcAaw0NssR/N7su+bbgG3Z3Fnf3J3UaGuoCowwV0u4ZuN6iJ4/tURHRFecR/4CjC7INCs70Lw/XlNI9Zf/PfpwNWugAMla4YU0P7lKJ8SfGou9DT+i4DferkgXnuBZ4EHs9g04LyfyPrcWFaXCe7upuybnerCl19cgvKfA1/POkiuot9Ns9UhqJYJ3ZKCs0nMAlYCd7iyCbzThK50NA+VBNKjgF/3kGG1QxyZAfwxczvfT5lUkdD93VfzOFfrUFupStpkZneGxUC6L/O6xQUutJYvhdtAzZf33/I6R9eLJzPDhY0/V3yZ3TKzHZJ2SLobOE7S9yQt9MVUxRdWZ0m6saBWnn4/IOkMr+2MkbRH0l2SHvVxViTNk3SOpBMKSh5WsmDsZlE5bBkgme5iR90Yv/e59rYDl4SIXgl+rOZtOrArQ0xpIPXnyRlSKllqWA15/WxHeMxwtjgic58+D/hgKAe3fWz9JQH1vdn3B3xh9XhmWQ93KAkk678zQ/quSgnKK5JuNbP1ZtYys7rfG47enWZ2k6OzbmZtf98ys6a3v0u6LCztSwEeMoeHvdY903m0g/lWAm1N0j99rBF97Q7oOze8N0nXu0WOC0AZ50odyr6tStoraX34HknzgRPc+scE99gnqQVMcqshoH5zraTc25C0DpifmcgESVdJuhw43WnbZYL0quFur9yVVSeTy/q410HmSDoLuFnSD81sS6i7RCQt9/JtEiSStnltqKhQ1cxK2UMF7m3Qea8IPCP9GklXpP1Zd5urgaVmFvk1nM+3JR0dwGGS1oyKTQxgEvCnsCaIbu5x4DseJC/03PcnBfk6wEcccXkgPRW4Mawy28BfgBMLqo3XlmRxq929rs9SQHyMFwBv9uxpIfBAtjhK7m/8cPV0Smrp1sMmhnWqp/tkz/Ugl1xECnx9XYyt4UHxBa/0TZS0PdsjPU3SFEnrnD5tiuyRdI/THytpqaTZAdljsz6P902TP0iaFqynEur6A27ZaS7JIoYknWlmvxsNSE+B+vyCql3TkTnoLT7HNcDLwGnO71jPvxthq2+Rv3swoLTeYWy3Abc6SgfDtuFJzmdO2MNtFxTM6lnRbCDUraqjZo80+moPpru74PFv4AfA20KeP6OAbpm/nwD8tAO/IV+MGbCoaMwh05rlefpw5Y4NwDtjlnM423Wvygmv/IgDcLTn1Kd4m+Kv9kl6xk18o2dJcWNhoqQrwx5qRdJqM3s+C8IfCm4ASY/4xsWTYUwrnW6ypCclXWNm//C1SDNVR90tLcjO2zzhR0R+mZ3lGT1Czzcmuj1j4vR0ezSvi9NfSXkdaZOFDtevW4ZFulF32Cg7qVUJyCHbsMaPwpWd1Dpk7WFmJCGGxQxZqnyQn6+II10lbjJnx/wqBSlmJZ0Wy5OOUXuWsezoW5ffNrtRbH6WcRi6dgmvdsm7Ugv4L6JQPWyMZxepAAAAAElFTkSuQmCC" alt="Sião" style="height:20px">
+        <img class="float-logo" src="data:image/png;base64,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" alt="M12" style="height:55px">
+    </div>
+    <div class="login-container" id="loginContainer" style="padding:30px 32px 34px">
+        <!-- LOGIN SIMPLES -->
+        <div class="tab-title">Acesso do Líder</div>
+        <div class="alert alert-error" id="loginError">CPF ou senha incorretos.</div>
+        <div class="form-field"><label>CPF</label><input type="text" id="loginCpf" placeholder="000.000.000-00" maxlength="14"></div>
+        <div class="form-field"><label>Senha</label><input type="password" id="loginSenha" placeholder="Digite sua senha"></div>
+        <button class="btn-primary" id="btnLogin">Entrar</button>
+        <!-- Link Primeiro Acesso -->
+        <div id="primeiroAcessoLink" style="text-align:center;margin-top:16px">
+            <a href="#" id="toggleCadastro" style="color:#888;font-size:.72rem;text-decoration:underline;transition:color .3s">Primeiro Acesso? Cadastre-se aqui</a>
+        </div>
+    </div>
+    <!-- FORMULÁRIO PRIMEIRO ACESSO -->
+    <div class="login-container" id="cadastroContainer" style="padding:30px 32px 34px;display:none;margin-top:16px">
+        <div class="tab-title">Cadastro do Líder Sênior</div>
+        <div class="alert alert-error" id="cadSeniorError"></div>
+        <div class="alert alert-success" id="cadSeniorSuccess">Cadastro realizado! Faça login acima.</div>
+        <div class="form-field"><label>Nome completo *</label><input type="text" id="cadSeniorNome" placeholder="Seu nome"></div>
+        <div class="form-field"><label>CPF *</label><input type="text" id="cadSeniorCpf" placeholder="000.000.000-00" maxlength="14"></div>
+        <div class="form-field"><label>Telefone</label><input type="text" id="cadSeniorTel" placeholder="(00) 00000-0000" maxlength="15"></div>
+        <div class="form-field"><label>Gênero *</label><select id="cadSeniorGenero"><option value="">Selecione...</option><option value="M">Masculino</option><option value="F">Feminino</option></select></div>
+        <div class="form-field"><label>Rede</label><input type="text" id="cadSeniorRede" placeholder="Ex: Rede Central"></div>
+        <div class="form-row">
+            <div class="form-field"><label>Senha *</label><input type="password" id="cadSeniorSenha" placeholder="Crie uma senha"></div>
+            <div class="form-field"><label>Confirmar *</label><input type="password" id="cadSeniorSenha2" placeholder="Repita a senha"></div>
+        </div>
+        <button class="btn-primary" id="btnCadSenior">Cadastrar</button>
+        <div style="text-align:center;margin-top:12px">
+            <a href="#" id="toggleLogin" style="color:#888;font-size:.72rem;text-decoration:underline">Já tenho acesso? Fazer login</a>
+        </div>
+    </div>
+    <div class="login-footer">
+        "Assim como o ferro afia o ferro,<br>o homem afia o seu companheiro"<br>
+        <strong>Provérbios 27:17</strong>
+    </div>
+</div>
+
+<!-- ===== DASHBOARD ===== -->
+<div class="dashboard-page" id="dashboardPage">
+    <div class="sr-header">
+        <div class="sr-header-left">
+            <img class="float-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAOCAYAAAC2POVFAAADHklEQVR42q2WW4iVVRTHf+vMaFY0TaJEF3oozQqKtHoqCLtMYBE9dCEFKYrACol5CIMoIjIIil6qh4oeIqGEnIcpYRQCL3Sxh8xgCirKHBPSslIUZs759fI/cPg4M/rQgo9v77XWXvu/LnvtXaqcPnWAFnAAWFpVJ9WBqmr3U1ZbVdXhf6LBOWQCdSoDVdVWh4E7gKuAaWAfsKOq/lJXASPAeFVtVy8G1gI7q2qnugHYW1VbT+mc/akzC7+d/2/qWVl/rfpLH90/1JXqxsxfUs9Qj6m/qv+oByNbrpbayjfYGNdcYGcD3gv2zGzweXhb1HvVNeom9WQcWaY+pq5Qh9SHsu956qPqRZmX2pojqEWfyHXUn9X7+wDugp2K8QsCqp309hpflv+D6ph6TyK7Sh1Xv1Q3q+vCb3XXqa+qO9QJdYN6Tr/ITuf/RGQfqX+rMw2wB5KeYfXfODMRIIt7D5j6ctY8qa7O+Ad1q3ok883Rv1E92thL9Wt1cS/YLqBv1flZ/HgM7A6g6Z4yODs6ow2Hf4+Td0f+XGyvVxeq1zUy8GPWXa1+k/Gb6iL1UnV7eO/3AzsSI0tzUknEbIBd0C38HKR3ezbu0hr1qYyfju5N6jvJxGvqZPZ+JtGcUuf1OLMi8qPdgm4DA8BYVU2E9wDwoTpYVZ8C47O1uqr6rKoeAZYDNwPb0vpGgYVRO6auA3YCtwOHgCuBS6I7lB5+sKqmU8fzotcBziXp7aRWlvR4/3AjXUtSn6r71QXhP6te39BdmShNqq9nzUb1kHqoobst8rXqCfXPRt3flcge7EaqEtlN6iBwIXBYXR+vAWZ69hjI7XUL8CLwgvoJ8FWicF+itC+33Uz408CQeiswmcvhtsgXAR8Dq4Et6ivAMLAx2N44nT7bj6bU+epl6tvpGE36KfLnMx/tqd8uHVbfy3hPusuuPrbeUgeq8Tbo9ER6tjdD921weVWdSKrOB24Arkj0vgd2VdXxnP5rgD1V9Z16Z+bHgQ+q6kgyuL+qxtJvR6LTBr6oqt39LoVTUbvZDVI2s906rbnmfW+pOez8B80BKn5urN90AAAAAElFTkSuQmCC" alt="Sião" style="height:10px">
+            <img class="float-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAWCAYAAAAfD8YZAAACSElEQVR42p3UTYiXVRQG8N/5/18Zm4EYsowkHUiiAsuETMhFX7SIal1Q7VpEtqloUwmGFLipTRHarqkWtigIgjYSSERFZB8EFRJ9UFQ2k4Ohjc7/aXOMWQSBFy73vIdz3/M853m4leQpbMYE5f9XMMJRSeadw0oyP2AhSWFNd08jSH+P+9QdR1W1jMUBQ1UFy//x96qqM6tSk7N5jAcsJ7kQ12IWH+Ia/FhVnye5Dp9W1UqS23Gsqj5OMhpwBmtxAK/gUXyATUkex/2YTrIG93XnfVga9cWf8V5V7cEXeBKv4xYcxmV4v6ruxfe4GqdGOFlVE6w0rxOYxkX4qQe2hEqyvwf2GmZG2JbkMWxNshnX4yrc1JRuxBW4E7fi9yS7saOSvImXcRJf4UocxQU43gj+xq/Ygpme+gOSPHeOJnl+wFSScRtgpflLMoPzsVRVf3VuaANNMDUgraGqmiS5GXc0zz8xm+RrvFNVh5KMui6jnmJhkuQhbOwJ78WhPse4NMmuVQ7716vpostxpB31Edb1+Qk+a733dv14wLG24CLexbP4Jsk67EjySKO5B/uwPcl2LAzt59twoKr+SLINb2AKF+OtlvHuqjqc5Es8iNkBc1joi+ehquqX5vZDVX3XsSTTVbWYZAobB7yKG5LMNef1SbZgwFwjOY312Jnk20Y7P6qqg+3l/djQe2fvTaviDbgEL2G6qg5Wy7UWe9o8x6vqmYb6cFW90PET3TF4GqeqX4t0wS7c1U/SSg/st5b0NN6uqhfPav0P8yQfE96s1pAAAAAASUVORK5CYII=" alt="M12" style="height:22px">
+            <div class="sr-header-info">
+                <span class="sr-header-title" id="dbTitle">Painel do Líder</span>
+                <span class="sr-header-sub" id="dbSubtitle">Gerencie seus discípulos</span>
+            </div>
+        </div>
+        <div class="sr-user">
+            <span class="sr-user-name" id="dbUserName"></span>
+            <span class="sr-user-badge" id="dbUserBadge"></span>
+            <button class="btn-logout" id="btnLogout">SAIR</button>
+        </div>
+    </div>
+
+    <div class="sr-content">
+        <div class="sr-stats">
+            <div class="stat-card"><div class="stat-num" id="statDiscipulos">0</div><div class="stat-label">Meus Discípulos</div></div>
+            <div class="stat-card"><div class="stat-num" id="statDoze">0</div><div class="stat-label">Meus 12</div></div>
+            <div class="stat-card"><div class="stat-num" id="statRede">0</div><div class="stat-label">Total na Rede</div></div>
+            <div class="stat-card"><div class="stat-num" id="statModulos">0</div><div class="stat-label">Módulos Concluídos</div></div>
+        </div>
+
+        <div class="db-tabs">
+            <button class="db-tab active" data-dbtab="discipulos">Meus Discípulos</button>
+            <button class="db-tab" data-dbtab="rede">Minha Rede</button>
+            <button class="db-tab" data-dbtab="historico">Histórico</button>
+            <button class="db-tab" data-dbtab="cadastrar">Cadastrar</button>
+            <button class="db-tab" data-dbtab="geracoes">Gerações</button>
+            <button class="db-tab" data-dbtab="gestao">Gestão</button>
+        </div>
+
+        <div class="db-tab-content active" id="dbtab-discipulos">
+            <div class="sr-card">
+                <div class="sr-card-header">
+                    <span class="sr-card-title">Discípulos Diretos</span>
+                    <button class="btn-add" id="btnNovoDiscipulo">+ Novo Discípulo</button>
+                </div>
+                <div class="sr-filter">
+                    <input type="text" id="filterDiscipulo" placeholder="Buscar por nome...">
+                    <select id="filterStatus"><option value="">Todos</option><option value="doze">Apenas 12</option><option value="discipulo">Apenas Discípulos</option></select>
+                </div>
+                <table class="sr-table">
+                    <thead><tr><th>Nome</th><th>Telefone</th><th>Rede</th><th>Módulos</th><th>Status</th><th>Ações</th></tr></thead>
+                    <tbody id="tblDiscipulos"></tbody>
+                </table>
+                <div class="sr-empty" id="emptyDiscipulos">Nenhum discípulo cadastrado ainda.</div>
+            </div>
+        </div>
+
+        <div class="db-tab-content" id="dbtab-rede">
+            <div class="sr-card">
+                <div class="sr-card-header"><span class="sr-card-title">Visão da Rede Completa</span></div>
+                <p style="color:var(--muted);font-size:.8rem;margin-bottom:16px">Visualização de todos os discípulos abaixo de você (somente leitura).</p>
+                <table class="sr-table">
+                    <thead><tr><th>Nome</th><th>Líder Direto</th><th>Nível</th><th>Status</th></tr></thead>
+                    <tbody id="tblRede"></tbody>
+                </table>
+                <div class="sr-empty" id="emptyRede">Sua rede ainda está vazia.</div>
+            </div>
+        </div>
+
+        <div class="db-tab-content" id="dbtab-historico">
+            <div class="sr-card">
+                <div class="sr-card-header"><span class="sr-card-title">Histórico de Transferências</span></div>
+                <table class="sr-table">
+                    <thead><tr><th>Discípulo</th><th>De</th><th>Para</th><th>Data</th><th>Motivo</th></tr></thead>
+                    <tbody id="tblHistorico"></tbody>
+                </table>
+                <div class="sr-empty" id="emptyHistorico">Nenhuma transferência registrada.</div>
+            </div>
+        </div>
+
+        <div class="db-tab-content" id="dbtab-cadastrar">
+            <div class="sr-card">
+                <div class="sr-card-header"><span class="sr-card-title">Cadastro de Novo Líder</span></div>
+                <div style="padding:20px">
+                    <div class="alert alert-error" id="cadError"></div>
+                    <div class="alert alert-success" id="cadSuccess">Cadastro realizado com sucesso!</div>
+                    <div class="form-field"><label>Nome Completo</label><input type="text" id="cadNome" placeholder="Nome do líder"></div>
+                    <div class="form-field"><label>CPF</label><input type="text" id="cadCpf" placeholder="000.000.000-00" maxlength="14"></div>
+                    <div class="form-row">
+                        <div class="form-field"><label>Telefone</label><input type="tel" id="cadTel" placeholder="(00) 00000-0000"></div>
+                        <div class="form-field"><label>Célula / Rede</label><input type="text" id="cadRede" placeholder="Nome da célula/rede"></div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-field"><label>Gênero</label><select id="cadGenero"><option value="">Selecione...</option><option value="M">Masculino</option><option value="F">Feminino</option></select></div>
+                        <div class="form-field"><label>Geração</label><select id="cadGeracao"></select></div>
+                    </div>
+                    <div class="form-field"><label>Senha</label><input type="password" id="cadSenha" placeholder="Crie uma senha"></div>
+                    <div class="form-field"><label>Confirmar Senha</label><input type="password" id="cadSenha2" placeholder="Repita a senha"></div>
+                    <button class="btn-primary" id="btnCadastro" style="width:100%;margin-top:10px">Cadastrar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="db-tab-content" id="dbtab-geracoes">
+            <div class="sr-card">
+                <div class="sr-card-header"><span class="sr-card-title">Selecione sua Geração</span></div>
+                <div style="padding:20px">
+                    <div class="gen-btns" id="genBtns"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="db-tab-content" id="dbtab-gestao">
+            <div class="sr-card">
+                <div class="sr-card-header"><span class="sr-card-title">Gestão de Discípulos</span></div>
+                <div style="padding:20px">
+                    <p style="color:var(--muted);font-size:.8rem;margin-bottom:14px">Busque por nome ou CPF para desligar ou deslegitimar.</p>
+                    <div class="form-field" style="margin-bottom:14px">
+                        <label>Buscar discípulo</label>
+                        <input type="text" id="gestBusca" placeholder="Digite o nome ou CPF...">
+                    </div>
+                    <div id="gestResultados" style="display:none;margin-bottom:12px">
+                        <div id="gestLista" style="display:flex;flex-direction:column;gap:6px"></div>
+                    </div>
+                    <div id="gestDetalhes" style="display:none">
+                        <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:16px;margin-bottom:12px">
+                            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px">
+                                <div>
+                                    <div style="font-size:.92rem;font-weight:700;color:#fff" id="gestNome"></div>
+                                    <div style="font-size:.7rem;color:#888;margin-top:3px" id="gestInfo"></div>
+                                </div>
+                                <div id="gestBadge"></div>
+                            </div>
+                            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:14px;font-size:.72rem;color:#aaa">
+                                <div>📱 <span id="gestTel">-</span></div>
+                                <div>📋 <span id="gestCpf">-</span></div>
+                                <div>🏠 <span id="gestRede">-</span></div>
+                                <div>📚 <span id="gestModulos">-</span></div>
+                            </div>
+                            <div style="display:flex;flex-direction:column;gap:10px">
+                                <div id="gestAcaoDeslegitimar" style="display:none;background:rgba(245,124,0,.08);border:1px solid rgba(245,124,0,.2);border-radius:6px;padding:12px">
+                                    <div style="font-weight:700;color:#f57c00;font-size:.75rem;margin-bottom:6px">⚠️ Deslegitimar</div>
+                                    <p style="color:#aaa;font-size:.68rem;margin-bottom:10px">Remove a liderança. Volta a ser discípulo comum.</p>
+                                    <button class="btn-action btn-demote" style="padding:8px 16px;font-size:.7rem" onclick="confirmarDeslegitimar()">Confirmar Deslegitimação</button>
+                                </div>
+                                <div style="background:rgba(211,47,47,.08);border:1px solid rgba(211,47,47,.2);border-radius:6px;padding:12px">
+                                    <div style="font-weight:700;color:#d32f2f;font-size:.75rem;margin-bottom:6px">🚫 Desligar do Discipulado</div>
+                                    <p style="color:#aaa;font-size:.68rem;margin-bottom:8px">Remove esta pessoa completamente.</p>
+                                    <div class="form-field" style="margin-bottom:10px"><label style="font-size:.65rem">Motivo (opcional)</label><input type="text" id="gestMotivo" placeholder="Ex: Mudou de igreja..."></div>
+                                    <button class="btn-action btn-remove" style="padding:8px 16px;font-size:.7rem" onclick="confirmarDesligar()">Confirmar Desligamento</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="footer">
+        <div class="footer-verse">"Assim como o ferro afia o ferro, o homem afia o seu companheiro"</div>
+        <div class="footer-ref">Provérbios 27:17</div>
+        <div class="footer-ministry">Ministério Apostólico Sião &nbsp;•&nbsp; Visão Celular M12</div>
+    </div>
+</div>
+
+<!-- MODAL: Novo Discípulo -->
+<div class="modal-overlay" id="modalDiscipulo">
+    <div class="modal">
+        <div class="modal-header"><span class="modal-title" id="modalDiscipuloTitle">Novo Discípulo</span><button class="modal-close" onclick="closeModal('modalDiscipulo')">&times;</button></div>
+        <div class="modal-body">
+            <div class="alert alert-error" id="modalDiscipuloError"></div>
+            <div class="form-field"><label>Nome Completo *</label><input type="text" id="discNome" placeholder="Nome do discípulo"></div>
+            <div class="form-row">
+                <div class="form-field"><label>CPF</label><input type="text" id="discCpf" placeholder="000.000.000-00" maxlength="14"></div>
+                <div class="form-field"><label>Telefone</label><input type="tel" id="discTel" placeholder="(00) 00000-0000"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-field"><label>Gênero *</label><select id="discGenero"><option value="">Selecione...</option><option value="M">Masculino</option><option value="F">Feminino</option></select></div>
+                <div class="form-field"><label>Rede/Célula</label><input type="text" id="discRede" placeholder="Nome da rede"></div>
+            </div>
+            <div class="form-row">
+                <div class="form-field"><label>E-mail</label><input type="email" id="discEmail" placeholder="email@exemplo.com"></div>
+                <div class="form-field"><label>Data Início</label><input type="date" id="discDataInicio"></div>
+            </div>
+        </div>
+        <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('modalDiscipulo')">Cancelar</button><button class="btn-save" id="btnSalvarDiscipulo">Salvar</button></div>
+    </div>
+</div>
+
+<!-- MODAL: Transferir -->
+<div class="modal-overlay" id="modalTransferir">
+    <div class="modal">
+        <div class="modal-header"><span class="modal-title">Transferir Discípulo</span><button class="modal-close" onclick="closeModal('modalTransferir')">&times;</button></div>
+        <div class="modal-body">
+            <p style="margin-bottom:16px;color:var(--muted);font-size:.85rem">Transferindo: <strong id="transferNome"></strong></p>
+            <div class="form-field"><label>Transferir para (selecione um dos seus 12)</label><select id="transferDestino"></select></div>
+            <div class="form-field"><label>Motivo (opcional)</label><textarea id="transferMotivo" placeholder="Descreva o motivo..."></textarea></div>
+        </div>
+        <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('modalTransferir')">Cancelar</button><button class="btn-save" id="btnConfirmarTransferencia">Transferir</button></div>
+    </div>
+</div>
+
+<!-- MODAL: Promover -->
+<div class="modal-overlay" id="modalPromover">
+    <div class="modal">
+        <div class="modal-header"><span class="modal-title">Legitimar Discípulo</span><button class="modal-close" onclick="closeModal('modalPromover')">&times;</button></div>
+        <div class="modal-body">
+            <p style="margin-bottom:16px;color:var(--muted);font-size:.85rem">Legitimando: <strong id="promoverNome"></strong><br><small>Isso criará um login para este discípulo gerenciar sua própria geração.</small></p>
+            <div class="alert alert-error" id="promoverError"></div>
+            <div class="form-field"><label>CPF do Discípulo *</label><input type="text" id="promoverCpf" placeholder="000.000.000-00" maxlength="14"></div>
+            <div class="form-field"><label>Senha Provisória *</label><input type="text" id="promoverSenha" placeholder="Senha inicial"></div>
+        </div>
+        <div class="modal-footer"><button class="btn-cancel" onclick="closeModal('modalPromover')">Cancelar</button><button class="btn-save" id="btnConfirmarPromocao">Legitimar</button></div>
+    </div>
+</div>
+
+<script>
+// ===== API CONFIG =====
+const API = 'https://workflow.autrix.com.br/webhook';
+
+async function api(endpoint, body = {}) {
+    try {
+        const res = await fetch(`${API}/${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        return await res.json();
+    } catch (e) {
+        console.error(`Erro API [${endpoint}]:`, e);
+        return null;
+    }
+}
+
+// ===== SPLASH =====
+document.getElementById('btnWelcome').addEventListener('click', () => {
+    const splash = document.getElementById('splashPage');
+    splash.classList.add('fade-out');
+    setTimeout(() => {
+        splash.style.display = 'none';
+        document.getElementById('loginPage').style.display = 'flex';
+    }, 500);
+});
+
+// ===== CONFIG =====
+const CONFIG = { maxGeracoes: 5, nomes: { 0:'Sênior', 1:'1ª Geração', 2:'2ª Geração', 3:'3ª Geração', 4:'4ª Geração', 5:'5ª Geração' } };
+
+// ===== STATE =====
+let currentUser = null;
+let cachedDiscipulos = [];
+let cachedRede = [];
+let editingDiscipulo = null;
+let transferringDiscipulo = null;
+let promotingDiscipulo = null;
+let gestaoDiscipuloId = null;
+
+// Restaurar sessão
+(function restoreSession() {
+    try {
+        const saved = sessionStorage.getItem('siao_user');
+        if (saved) {
+            currentUser = JSON.parse(saved);
+            showDashboard();
+        }
+    } catch(e) {}
+})();
+
+// ===== TABS DASHBOARD =====
+document.querySelectorAll('.db-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+        document.querySelectorAll('.db-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.db-tab-content').forEach(c => c.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('dbtab-' + tab.dataset.dbtab).classList.add('active');
+    });
+});
+
+// ===== GERAÇÕES (visualização) =====
+function initGeracoes() {
+    const btns = document.getElementById('genBtns');
+    const selectGeracao = document.getElementById('cadGeracao');
+    let btnsHtml = '';
+    selectGeracao.innerHTML = '<option value="">Selecione...</option>';
+    const pyramid = [[0],[1,2],[3,4,5]];
+    for (let i = 0; i <= CONFIG.maxGeracoes; i++) {
+        const nome = CONFIG.nomes[i] || `${i}ª Geração`;
+        if (i > 0) selectGeracao.innerHTML += `<option value="${i}">${nome}</option>`;
+    }
+    pyramid.forEach(row => {
+        btnsHtml += '<div class="gen-row">';
+        row.forEach(i => { const nome = CONFIG.nomes[i] || `${i}ª Geração`; btnsHtml += `<button class="gen-btn" data-gen="${i}">${nome}</button>`; });
+        btnsHtml += '</div>';
+    });
+    btns.innerHTML = btnsHtml;
+    // TODO: endpoint para listar usuários por geração (não existe no fluxo ainda)
+    document.querySelectorAll('.gen-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            alert('Funcionalidade de troca de geração requer endpoint adicional no n8n.');
+        });
+    });
+}
+
+// ===== MÁSCARAS =====
+function maskCPF(v) { v = v.replace(/\D/g, '').slice(0, 11); if (v.length > 9) return v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4'); if (v.length > 6) return v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3'); if (v.length > 3) return v.replace(/(\d{3})(\d{1,3})/, '$1.$2'); return v; }
+document.addEventListener('input', e => { if (e.target.id.toLowerCase().includes('cpf')) e.target.value = maskCPF(e.target.value); });
+
+// ===== LOGIN =====
+document.getElementById('btnLogin').addEventListener('click', async () => {
+    const cpf = document.getElementById('loginCpf').value;
+    const senha = document.getElementById('loginSenha').value;
+    const err = document.getElementById('loginError');
+    const btn = document.getElementById('btnLogin');
+    
+    if (!cpf || !senha) { err.style.display = 'block'; return; }
+    
+    btn.textContent = 'ENTRANDO...'; btn.disabled = true;
+    
+    const data = await api('auth/login', { cpf, senha });
+    
+    if (data && data.sucesso) {
+        err.style.display = 'none';
+        currentUser = data.usuario;
+        sessionStorage.setItem('siao_user', JSON.stringify(currentUser));
+        showDashboard();
+    } else {
+        err.textContent = (data && data.erro) || 'CPF ou senha incorretos.';
+        err.style.display = 'block';
+    }
+    
+    btn.textContent = 'ENTRAR'; btn.disabled = false;
+});
+document.getElementById('loginSenha').addEventListener('keydown', e => { if (e.key === 'Enter') document.getElementById('btnLogin').click(); });
+
+// ===== PRIMEIRO ACESSO =====
+(async function checkPrimeiroAcesso() {
+    try {
+        const res = await api('primeiro-acesso', { acao: 'check' });
+        if (res && !res.vazio) {
+            document.getElementById('primeiroAcessoLink').style.display = 'none';
+        }
+    } catch(e) { /* link fica visível se falhar */ }
+})();
+
+document.getElementById('toggleCadastro').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('loginContainer').style.display = 'none';
+    document.getElementById('cadastroContainer').style.display = 'block';
+});
+document.getElementById('toggleLogin').addEventListener('click', e => {
+    e.preventDefault();
+    document.getElementById('cadastroContainer').style.display = 'none';
+    document.getElementById('loginContainer').style.display = 'block';
+});
+
+// Máscaras do cadastro sênior
+document.getElementById('cadSeniorCpf').addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 9) v = v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+    else if (v.length > 6) v = v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+    else if (v.length > 3) v = v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+    e.target.value = v;
+});
+document.getElementById('cadSeniorTel').addEventListener('input', e => {
+    let v = e.target.value.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 6) v = v.replace(/(\d{2})(\d{5})(\d{1,4})/, '($1) $2-$3');
+    else if (v.length > 2) v = v.replace(/(\d{2})(\d{1,5})/, '($1) $2');
+    e.target.value = v;
+});
+
+document.getElementById('btnCadSenior').addEventListener('click', async () => {
+    const nome = document.getElementById('cadSeniorNome').value.trim();
+    const cpf = document.getElementById('cadSeniorCpf').value.trim();
+    const tel = document.getElementById('cadSeniorTel').value.trim();
+    const genero = document.getElementById('cadSeniorGenero').value;
+    const rede = document.getElementById('cadSeniorRede').value.trim();
+    const senha = document.getElementById('cadSeniorSenha').value;
+    const senha2 = document.getElementById('cadSeniorSenha2').value;
+    const err = document.getElementById('cadSeniorError');
+    const suc = document.getElementById('cadSeniorSuccess');
+    err.style.display = 'none'; suc.style.display = 'none';
+
+    if (!nome || !cpf || !genero || !senha) { err.textContent = 'Preencha todos os campos obrigatórios.'; err.style.display = 'block'; return; }
+    if (senha !== senha2) { err.textContent = 'As senhas não coincidem.'; err.style.display = 'block'; return; }
+    if (senha.length < 4) { err.textContent = 'Senha deve ter pelo menos 4 caracteres.'; err.style.display = 'block'; return; }
+
+    const btn = document.getElementById('btnCadSenior');
+    btn.textContent = 'CADASTRANDO...'; btn.disabled = true;
+
+    const res = await api('primeiro-acesso', {
+        acao: 'cadastrar', nome, cpf, telefone: tel, genero, rede, senha
+    });
+
+    btn.textContent = 'CADASTRAR'; btn.disabled = false;
+
+    if (res && res.sucesso) {
+        suc.style.display = 'block';
+        document.getElementById('primeiroAcessoLink').style.display = 'none';
+        setTimeout(() => {
+            document.getElementById('cadastroContainer').style.display = 'none';
+            document.getElementById('loginContainer').style.display = 'block';
+            document.getElementById('loginCpf').value = cpf;
+        }, 2000);
+    } else {
+        err.textContent = (res && res.erro) || 'Erro ao cadastrar. Tente novamente.';
+        err.style.display = 'block';
+    }
+});
+
+// ===== LOGOUT =====
+document.getElementById('btnLogout').addEventListener('click', () => {
+    currentUser = null;
+    cachedDiscipulos = [];
+    cachedRede = [];
+    sessionStorage.removeItem('siao_user');
+    document.getElementById('dashboardPage').style.display = 'none';
+    const splash = document.getElementById('splashPage');
+    splash.style.display = 'flex';
+    splash.classList.remove('fade-out');
+});
+
+// ===== DASHBOARD =====
+function showDashboard() {
+    document.getElementById('splashPage').style.display = 'none';
+    document.getElementById('loginPage').style.display = 'none';
+    document.getElementById('dashboardPage').style.display = 'block';
+    document.getElementById('dbUserName').textContent = currentUser.nome;
+    document.getElementById('dbUserBadge').textContent = CONFIG.nomes[currentUser.geracao] || currentUser.geracao + 'ª Geração';
+    document.getElementById('dbTitle').textContent = currentUser.geracao === 0 ? 'Painel Sênior' : 'Painel do Líder';
+    document.getElementById('dbSubtitle').textContent = currentUser.rede || 'Gerencie seus discípulos';
+    renderDashboard();
+}
+
+async function renderDashboard() {
+    // Carregar discípulos via API
+    const data = await api('discipulos', { acao: 'listar', lider_id: currentUser.id });
+    cachedDiscipulos = Array.isArray(data) ? data : [];
+    
+    const meus = cachedDiscipulos;
+    const doze = meus.filter(d => d.usuario_id !== null);
+    
+    document.getElementById('statDiscipulos').textContent = meus.length;
+    document.getElementById('statDoze').textContent = doze.length;
+    document.getElementById('statModulos').textContent = meus.reduce((s, d) => s + (d.modulos || 0), 0);
+    
+    renderTabelaDiscipulos(meus);
+    
+    // Carregar rede via API
+    await renderTabelaRede();
+    
+    // Histórico
+    renderTabelaHistorico();
+}
+
+function renderTabelaDiscipulos(lista) {
+    const tbody = document.getElementById('tblDiscipulos');
+    const empty = document.getElementById('emptyDiscipulos');
+    if (lista.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    tbody.innerHTML = lista.map(d => {
+        const ehDoze = d.usuario_id !== null;
+        const badge = ehDoze ? '<span class="badge badge-doze">12</span>' : '<span class="badge badge-new">Discípulo</span>';
+        const m = d.modulos || 0;
+        const mBadge = m >= 8 ? '<span class="badge badge-complete">Completo</span>' : m > 0 ? `<span class="badge badge-progress">${m}/8</span>` : '<span class="badge badge-new">0/8</span>';
+        return `<tr><td>${d.nome}</td><td>${d.telefone || '-'}</td><td>${d.rede || '-'}</td><td>${mBadge}</td><td>${badge}</td><td class="actions"><button class="btn-action" onclick="editarDiscipulo('${d.id}')">Editar</button>${!ehDoze ? `<button class="btn-action btn-transfer" onclick="abrirTransferir('${d.id}')">Transferir</button><button class="btn-action btn-promote" onclick="abrirPromover('${d.id}')">Legitimar</button>` : ''}</td></tr>`;
+    }).join('');
+}
+
+async function renderTabelaRede() {
+    const tbody = document.getElementById('tblRede');
+    const empty = document.getElementById('emptyRede');
+    
+    const data = await api('rede', { lider_id: currentUser.id });
+    cachedRede = Array.isArray(data) ? data : [];
+    
+    document.getElementById('statRede').textContent = cachedRede.length;
+    
+    if (cachedRede.length === 0) { tbody.innerHTML = ''; empty.style.display = 'block'; return; }
+    empty.style.display = 'none';
+    tbody.innerHTML = cachedRede.map(r => {
+        const ehDoze = r.usuario_id !== null;
+        return `<tr><td>${r.nome}</td><td>${r.lider_nome || '-'}</td><td>${r.nivel || '-'}</td><td>${ehDoze ? '<span class="badge badge-doze">12</span>' : '<span class="badge badge-new">Discípulo</span>'}</td></tr>`;
+    }).join('');
+}
+
+function renderTabelaHistorico() {
+    const tbody = document.getElementById('tblHistorico');
+    const empty = document.getElementById('emptyHistorico');
+    // TODO: criar endpoint GET /webhook/historico no n8n para listar histórico
+    // Por enquanto, exibe vazio
+    tbody.innerHTML = '';
+    empty.style.display = 'block';
+}
+
+// ===== FILTROS =====
+document.getElementById('filterDiscipulo').addEventListener('input', filtrarDiscipulos);
+document.getElementById('filterStatus').addEventListener('change', filtrarDiscipulos);
+function filtrarDiscipulos() {
+    const nome = document.getElementById('filterDiscipulo').value.toLowerCase();
+    const status = document.getElementById('filterStatus').value;
+    let lista = [...cachedDiscipulos];
+    if (nome) lista = lista.filter(d => d.nome.toLowerCase().includes(nome));
+    if (status === 'doze') lista = lista.filter(d => d.usuario_id !== null);
+    if (status === 'discipulo') lista = lista.filter(d => d.usuario_id === null);
+    renderTabelaDiscipulos(lista);
+}
+
+// ===== MODAIS =====
+function openModal(id) { document.getElementById(id).classList.add('show'); }
+function closeModal(id) { document.getElementById(id).classList.remove('show'); }
+
+document.getElementById('btnNovoDiscipulo').addEventListener('click', () => {
+    editingDiscipulo = null;
+    document.getElementById('modalDiscipuloTitle').textContent = 'Novo Discípulo';
+    ['discNome', 'discCpf', 'discTel', 'discEmail', 'discDataInicio'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('discGenero').value = currentUser.genero;
+    document.getElementById('discRede').value = currentUser.rede || '';
+    document.getElementById('modalDiscipuloError').style.display = 'none';
+    openModal('modalDiscipulo');
+});
+
+function editarDiscipulo(id) {
+    const d = cachedDiscipulos.find(x => x.id === id);
+    if (!d) return;
+    editingDiscipulo = id;
+    document.getElementById('modalDiscipuloTitle').textContent = 'Editar Discípulo';
+    document.getElementById('discNome').value = d.nome;
+    document.getElementById('discCpf').value = d.cpf || '';
+    document.getElementById('discTel').value = d.telefone || '';
+    document.getElementById('discGenero').value = d.genero;
+    document.getElementById('discRede').value = d.rede || '';
+    document.getElementById('discEmail').value = d.email || '';
+    document.getElementById('discDataInicio').value = d.data_inicio || '';
+    openModal('modalDiscipulo');
+}
+
+document.getElementById('btnSalvarDiscipulo').addEventListener('click', async () => {
+    const nome = document.getElementById('discNome').value.trim();
+    const genero = document.getElementById('discGenero').value;
+    const err = document.getElementById('modalDiscipuloError');
+    if (!nome || !genero) { err.textContent = 'Preencha os campos obrigatórios.'; err.style.display = 'block'; return; }
+    if (genero !== currentUser.genero && currentUser.geracao !== 0) { err.textContent = 'Você só pode cadastrar discípulos do seu gênero.'; err.style.display = 'block'; return; }
+    
+    const btn = document.getElementById('btnSalvarDiscipulo');
+    btn.textContent = 'SALVANDO...'; btn.disabled = true;
+    
+    if (editingDiscipulo) {
+        await api('discipulos', {
+            acao: 'editar',
+            id: editingDiscipulo,
+            nome,
+            telefone: document.getElementById('discTel').value
+        });
+    } else {
+        await api('discipulos', {
+            acao: 'criar',
+            nome,
+            cpf: document.getElementById('discCpf').value,
+            telefone: document.getElementById('discTel').value,
+            genero,
+            rede: document.getElementById('discRede').value,
+            lider_id: currentUser.id
+        });
+    }
+    
+    btn.textContent = 'Salvar'; btn.disabled = false;
+    closeModal('modalDiscipulo');
+    await renderDashboard();
+});
+
+// ===== GESTÃO =====
+document.getElementById('gestBusca').addEventListener('input', function() {
+    const q = this.value.trim().toLowerCase();
+    const resultados = document.getElementById('gestResultados');
+    const lista = document.getElementById('gestLista');
+    const detalhes = document.getElementById('gestDetalhes');
+    detalhes.style.display = 'none';
+    gestaoDiscipuloId = null;
+    if (q.length < 2) { resultados.style.display = 'none'; return; }
+    const found = cachedDiscipulos.filter(d => d.nome.toLowerCase().includes(q) || (d.cpf && d.cpf.includes(q)));
+    if (found.length === 0) { lista.innerHTML = '<div style="color:#888;font-size:.75rem;padding:6px">Nenhum discípulo encontrado.</div>'; resultados.style.display = 'block'; return; }
+    lista.innerHTML = found.map(d => {
+        const ehDoze = d.usuario_id !== null;
+        const badge = ehDoze ? '<span class="badge badge-doze" style="margin-left:8px;font-size:.6rem;padding:2px 8px">12</span>' : '<span class="badge badge-new" style="margin-left:8px;font-size:.6rem;padding:2px 8px">Discípulo</span>';
+        return `<button onclick="selecionarGestao('${d.id}')" style="display:flex;align-items:center;justify-content:space-between;width:100%;padding:8px 12px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.1);border-radius:6px;color:#fff;font-size:.78rem;cursor:pointer;text-align:left">${d.nome}${badge}</button>`;
+    }).join('');
+    resultados.style.display = 'block';
+});
+
+function selecionarGestao(id) {
+    const d = cachedDiscipulos.find(x => x.id === id);
+    if (!d) return;
+    gestaoDiscipuloId = id;
+    const ehDoze = d.usuario_id !== null;
+    document.getElementById('gestNome').textContent = d.nome;
+    document.getElementById('gestInfo').textContent = ehDoze ? 'Líder legitimado (12)' : 'Discípulo em formação';
+    document.getElementById('gestBadge').innerHTML = ehDoze ? '<span class="badge badge-doze">12</span>' : '<span class="badge badge-new">Discípulo</span>';
+    document.getElementById('gestTel').textContent = d.telefone || '-';
+    document.getElementById('gestCpf').textContent = d.cpf || '-';
+    document.getElementById('gestRede').textContent = d.rede || '-';
+    document.getElementById('gestModulos').textContent = (d.modulos || 0) + '/8';
+    document.getElementById('gestAcaoDeslegitimar').style.display = ehDoze ? 'block' : 'none';
+    document.getElementById('gestMotivo').value = '';
+    document.getElementById('gestResultados').style.display = 'none';
+    document.getElementById('gestDetalhes').style.display = 'block';
+}
+
+async function confirmarDeslegitimar() {
+    if (!gestaoDiscipuloId) return;
+    const d = cachedDiscipulos.find(x => x.id === gestaoDiscipuloId);
+    if (!d || !d.usuario_id) return;
+    if (!confirm(`Deslegitimar "${d.nome}"?\nIsso vai remover o acesso de líder.`)) return;
+    // TODO: criar endpoint específico para deslegitimar no n8n
+    // Por enquanto usa deletar (desativa discípulo)
+    await api('discipulos', { acao: 'deletar', id: gestaoDiscipuloId });
+    alert(`"${d.nome}" foi deslegitimado.`);
+    document.getElementById('gestDetalhes').style.display = 'none';
+    document.getElementById('gestBusca').value = '';
+    gestaoDiscipuloId = null;
+    await renderDashboard();
+}
+
+async function confirmarDesligar() {
+    if (!gestaoDiscipuloId) return;
+    const d = cachedDiscipulos.find(x => x.id === gestaoDiscipuloId);
+    if (!d) return;
+    const motivo = document.getElementById('gestMotivo').value.trim();
+    if (!confirm(`Desligar "${d.nome}" do discipulado?${motivo ? '\nMotivo: ' + motivo : ''}`)) return;
+    await api('discipulos', { acao: 'deletar', id: gestaoDiscipuloId });
+    alert(`"${d.nome}" foi desligado.`);
+    document.getElementById('gestDetalhes').style.display = 'none';
+    document.getElementById('gestBusca').value = '';
+    gestaoDiscipuloId = null;
+    await renderDashboard();
+}
+
+// ===== TRANSFERIR =====
+function abrirTransferir(id) {
+    const d = cachedDiscipulos.find(x => x.id === id);
+    if (!d) return;
+    transferringDiscipulo = id;
+    document.getElementById('transferNome').textContent = d.nome;
+    const doze = cachedDiscipulos.filter(x => x.usuario_id !== null);
+    const select = document.getElementById('transferDestino');
+    select.innerHTML = doze.length === 0 ? '<option value="">Você não tem nenhum 12</option>' : '<option value="">Selecione...</option>' + doze.map(m => `<option value="${m.usuario_id}">${m.nome}</option>`).join('');
+    document.getElementById('transferMotivo').value = '';
+    openModal('modalTransferir');
+}
+
+document.getElementById('btnConfirmarTransferencia').addEventListener('click', async () => {
+    const destino = document.getElementById('transferDestino').value;
+    if (!destino) { alert('Selecione um destino.'); return; }
+    
+    const btn = document.getElementById('btnConfirmarTransferencia');
+    btn.textContent = 'TRANSFERINDO...'; btn.disabled = true;
+    
+    await api('transferir', {
+        discipulo_id: transferringDiscipulo,
+        lider_origem_id: currentUser.id,
+        lider_destino_id: destino,
+        motivo: document.getElementById('transferMotivo').value
+    });
+    
+    btn.textContent = 'Transferir'; btn.disabled = false;
+    closeModal('modalTransferir');
+    await renderDashboard();
+});
+
+// ===== PROMOVER =====
+function abrirPromover(id) {
+    const d = cachedDiscipulos.find(x => x.id === id);
+    if (!d) return;
+    promotingDiscipulo = id;
+    document.getElementById('promoverNome').textContent = d.nome;
+    document.getElementById('promoverCpf').value = d.cpf || '';
+    document.getElementById('promoverSenha').value = '';
+    document.getElementById('promoverError').style.display = 'none';
+    openModal('modalPromover');
+}
+
+document.getElementById('btnConfirmarPromocao').addEventListener('click', async () => {
+    const cpf = document.getElementById('promoverCpf').value;
+    const senha = document.getElementById('promoverSenha').value;
+    const err = document.getElementById('promoverError');
+    if (!cpf || !senha) { err.textContent = 'Preencha CPF e senha.'; err.style.display = 'block'; return; }
+    
+    const btn = document.getElementById('btnConfirmarPromocao');
+    btn.textContent = 'LEGITIMANDO...'; btn.disabled = true;
+    
+    const result = await api('promover', {
+        discipulo_id: promotingDiscipulo,
+        cpf,
+        senha,
+        lider_id: currentUser.id
+    });
+    
+    btn.textContent = 'Legitimar'; btn.disabled = false;
+    
+    if (result && result.length > 0) {
+        closeModal('modalPromover');
+        const d = cachedDiscipulos.find(x => x.id === promotingDiscipulo);
+        alert(`Login criado!\nCPF: ${cpf}\nSenha: ${senha}\n\n${d ? d.nome : 'Discípulo'} agora é líder!`);
+        await renderDashboard();
+    } else {
+        err.textContent = 'Erro ao legitimar. Verifique se o CPF já possui login.';
+        err.style.display = 'block';
+    }
+});
+
+// ===== CADASTRO DE LÍDER =====
+document.getElementById('btnCadastro').addEventListener('click', async () => {
+    const err = document.getElementById('cadError');
+    const suc = document.getElementById('cadSuccess');
+    err.style.display = 'none'; suc.style.display = 'none';
+    // TODO: criar endpoint dedicado para cadastro de líder no n8n
+    alert('Funcionalidade de cadastro direto de líder requer endpoint adicional no n8n.\nUse a opção "Legitimar" na aba Discípulos.');
+});
+
+// ===== INIT =====
+initGeracoes();
+</script>
+</body>
+</html>
