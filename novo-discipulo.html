@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aprovar Líder — Portal M12</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#3d3d3d;--bg2:#2d2d2d;--bg3:#353535;
+            --dark:#1a1a1a;--muted:#888;
+            --gold:#c9a84c;--gold-dark:#a08234;--gold-light:#e8cc6a;
+            --blue:#4a90c4;--lilac:#a87cc4;
+            --green:#2e7d32;--green-soft:rgba(46,125,50,.08);
+        }
+        body{font-family:'Montserrat',sans-serif;background:var(--bg);min-height:100vh;margin:0;color:#fff}
+
+        .header{background:var(--bg2);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:100}
+        .header-left{display:flex;align-items:center;gap:10px}
+        .header-logos{display:flex;align-items:center;gap:6px}
+        .header-logos img{opacity:.85}
+        .header-title-area{display:flex;flex-direction:column}
+        .header-title{color:#e0e0e0;font-size:.75rem;font-weight:700;letter-spacing:.8px}
+        .header-sub{color:#666;font-size:.5rem;letter-spacing:.5px;margin-top:1px}
+        .btn-voltar{padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,.12);color:#888;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:600;cursor:pointer;letter-spacing:.8px;transition:all .3s;text-transform:uppercase;text-decoration:none}
+        .btn-voltar:hover{border-color:rgba(201,168,76,.3);color:var(--gold)}
+        @media(max-width:600px){.header{padding:10px 14px}}
+
+        .content{max-width:500px;margin:0 auto;padding:16px 14px 40px}
+
+        .page-icon{text-align:center;font-size:2rem;margin:20px 0 8px;opacity:.4}
+        .page-title{text-align:center;font-size:.9rem;font-weight:700;color:#e0e0e0;letter-spacing:.5px;margin-bottom:4px}
+        .page-sub{text-align:center;font-size:.62rem;color:#777;margin-bottom:24px}
+
+        /* FORM CARD */
+        .form-card{
+            background:var(--bg2);border-radius:14px;
+            border:1px solid rgba(255,255,255,.06);
+            padding:24px 22px 28px;
+        }
+
+        .form-field{margin-bottom:16px}
+        .form-field label{
+            display:block;color:#bbb;font-size:.62rem;font-weight:600;
+            margin-bottom:5px;letter-spacing:.6px;text-transform:uppercase;
+        }
+        .form-field input,.form-field select{
+            width:100%;padding:11px 13px;
+            background:rgba(255,255,255,.05);
+            border:1px solid rgba(255,255,255,.1);
+            border-radius:8px;color:#fff;
+            font-family:'Montserrat',sans-serif;
+            font-size:.82rem;transition:all .3s;
+        }
+        .form-field input:focus,.form-field select:focus{
+            outline:none;border-color:rgba(201,168,76,.35);
+            background:rgba(201,168,76,.04);
+            box-shadow:0 0 0 3px rgba(201,168,76,.06);
+        }
+        .form-field input::placeholder{color:#555}
+        .form-field select{color:#aaa}
+        .form-field select option{background:var(--bg2);color:#fff}
+
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        @media(max-width:480px){.form-row{grid-template-columns:1fr}}
+
+        .form-hint{font-size:.55rem;color:#666;margin-top:4px;font-style:italic}
+
+        /* ALERTS */
+        .alert{padding:10px;border-radius:8px;font-size:.72rem;text-align:center;display:none;margin-bottom:16px}
+        .alert-error{background:rgba(220,53,69,.12);border:1px solid rgba(220,53,69,.2);color:#ff6b6b}
+        .alert-success{background:rgba(46,125,50,.1);border:1px solid rgba(46,125,50,.2);color:#66bb6a}
+
+        /* BUTTON */
+        .btn-salvar{
+            width:100%;padding:14px;
+            background:transparent;
+            border:1px solid rgba(46,125,50,.3);
+            color:#4caf50;
+            border-radius:8px;
+            font-family:'Montserrat',sans-serif;
+            font-size:.82rem;font-weight:600;
+            letter-spacing:2px;text-transform:uppercase;
+            cursor:pointer;transition:all .4s ease;
+            margin-top:8px;
+        }
+        .btn-salvar:hover{
+            background:rgba(46,125,50,.9);
+            color:#fff;border-color:rgba(46,125,50,.5);
+            transform:translateY(-2px);
+            box-shadow:0 6px 24px rgba(46,125,50,.18);
+        }
+        .btn-salvar:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+        /* COLOR PICKER */
+        .color-picker-label{
+            font-size:.55rem;color:#999;font-weight:600;
+            letter-spacing:.5px;text-transform:uppercase;
+            margin:8px 0 6px;
+        }
+        .color-picker{
+            display:flex;gap:5px;flex-wrap:wrap;
+        }
+        .c-swatch{
+            width:26px;height:26px;border-radius:7px;cursor:pointer;
+            border:2px solid transparent;transition:all .25s;
+            position:relative;
+        }
+        .c-swatch[data-light]{border-color:rgba(255,255,255,.18)}
+        .c-swatch[data-dark]{border-color:rgba(255,255,255,.1)}
+        .c-swatch:hover{transform:scale(1.15);z-index:1}
+        .c-swatch.active{
+            border-color:#fff !important;
+            box-shadow:0 2px 12px rgba(0,0,0,.3);
+            transform:scale(1.15);
+        }
+        .c-swatch.active::after{
+            content:'✓';position:absolute;
+            top:50%;left:50%;transform:translate(-50%,-50%);
+            font-size:.6rem;font-weight:900;
+            text-shadow:0 1px 3px rgba(0,0,0,.5);
+        }
+        .c-swatch.active[data-light]::after{color:#333;text-shadow:none}
+        .c-swatch.active:not([data-light])::after{color:#fff}
+        .rede-preview{
+            display:none;margin-top:8px;
+            padding:8px 12px;border-radius:8px;
+            background:var(--bg3);
+            border-left:3px solid #888;
+            font-size:.6rem;color:#999;
+            transition:all .3s;
+        }
+        .rede-preview.visible{display:flex;align-items:center;gap:8px}
+        .rede-preview-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;transition:all .3s}
+        .rede-preview-text{font-weight:600;transition:all .3s}
+
+        @media(max-width:400px){.c-swatch{width:22px;height:22px;border-radius:5px}}
+
+        .footer{background:var(--bg2);padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,.04);margin-top:12px}
+        .footer-verse{color:#666;font-size:.62rem;font-style:italic;line-height:1.7}
+        .footer-ref{color:#888;font-size:.58rem;font-weight:600;margin-top:3px}
+        .footer-ministry{color:#555;font-size:.5rem;margin-top:10px;letter-spacing:2px;text-transform:uppercase}
+
+        @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        .form-card{animation:fadeUp .4s ease both;animation-delay:.1s}
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-left">
+        <div class="header-logos">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAOCAYAAAC2POVFAAADHklEQVR42q2WW4iVVRTHf+vMaFY0TaJEF3oozQqKtHoqCLtMYBE9dCEFKYrACol5CIMoIjIIil6qh4oeIqGEnIcpYRQCL3Sxh8xgCirKHBPSslIUZs759fI/cPg4M/rQgo9v77XWXvu/LnvtXaqcPnWAFnAAWFpVJ9WBqmr3U1ZbVdXhf6LBOWQCdSoDVdVWh4E7gKuAaWAfsKOq/lJXASPAeFVtVy8G1gI7q2qnugHYW1VbT+mc/akzC7+d/2/qWVl/rfpLH90/1JXqxsxfUs9Qj6m/qv+oByNbrpbayjfYGNdcYGcD3gv2zGzweXhb1HvVNeom9WQcWaY+pq5Qh9SHsu956qPqRZmX2pojqEWfyHXUn9X7+wDugp2K8QsCqp309hpflv+D6ph6TyK7Sh1Xv1Q3q+vCb3XXqa+qO9QJdYN6Tr/ITuf/RGQfqX+rMw2wB5KeYfXfODMRIIt7D5j6ctY8qa7O+Ad1q3ok883Rv1E92thL9Wt1cS/YLqBv1flZ/HgM7A6g6Z4yODs6ow2Hf4+Td0f+XGyvVxeq1zUy8GPWXa1+k/Gb6iL1UnV7eO/3AzsSI0tzUknEbIBd0C38HKR3ezbu0hr1qYyfju5N6jvJxGvqZPZ+JtGcUuf1OLMi8qPdgm4DA8BYVU2E9wDwoTpYVZ8C47O1uqr6rKoeAZYDNwPb0vpGgYVRO6auA3YCtwOHgCuBS6I7lB5+sKqmU8fzotcBziXp7aRWlvR4/3AjXUtSn6r71QXhP6te39BdmShNqq9nzUb1kHqoobst8rXqCfXPRt3flcge7EaqEtlN6iBwIXBYXR+vAWZ69hjI7XUL8CLwgvoJ8FWicF+itC+33Uz408CQeiswmcvhtsgXAR8Dq4Et6ivAMLAx2N44nT7bj6bU+epl6tvpGE36KfLnMx/tqd8uHVbfy3hPusuuPrbeUgeq8Tbo9ER6tjdD921weVWdSKrOB24Arkj0vgd2VdXxnP5rgD1V9Z16Z+bHgQ+q6kgyuL+qxtJvR6LTBr6oqt39LoVTUbvZDVI2s906rbnmfW+pOez8B80BKn5urN90AAAAAElFTkSuQmCC" alt="Sião" style="height:10px">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAWCAYAAAAfD8YZAAACSElEQVR42p3UTYiXVRQG8N/5/18Zm4EYsowkHUiiAsuETMhFX7SIal1Q7VpEtqloUwmGFLipTRHarqkWtigIgjYSSERFZB8EFRJ9UFQ2k4Ohjc7/aXOMWQSBFy73vIdz3/M853m4leQpbMYE5f9XMMJRSeadw0oyP2AhSWFNd08jSH+P+9QdR1W1jMUBQ1UFy//x96qqM6tSk7N5jAcsJ7kQ12IWH+Ia/FhVnye5Dp9W1UqS23Gsqj5OMhpwBmtxAK/gUXyATUkex/2YTrIG93XnfVga9cWf8V5V7cEXeBKv4xYcxmV4v6ruxfe4GqdGOFlVE6w0rxOYxkX4qQe2hEqyvwf2GmZG2JbkMWxNshnX4yrc1JRuxBW4E7fi9yS7saOSvImXcRJf4UocxQU43gj+xq/Ygpme+gOSPHeOJnl+wFSScRtgpflLMoPzsVRVf3VuaANNMDUgraGqmiS5GXc0zz8xm+RrvFNVh5KMui6jnmJhkuQhbOwJ78WhPse4NMmuVQ7716vpostxpB31Edb1+Qk+a733dv14wLG24CLexbP4Jsk67EjySKO5B/uwPcl2LAzt59twoKr+SLINb2AKF+OtlvHuqjqc5Es8iNkBc1joi+ehquqX5vZDVX3XsSTTVbWYZAobB7yKG5LMNef1SbZgwFwjOY312Jnk20Y7P6qqg+3l/djQe2fvTaviDbgEL2G6qg5Wy7UWe9o8x6vqmYb6cFW90PET3TF4GqeqX4t0wS7c1U/SSg/st5b0NN6uqhfPav0P8yQfE96s1pAAAAAASUVORK5CYII=" alt="M12" style="height:14px">
+        </div>
+        <div class="header-title-area">
+            <div class="header-title">Aprovar Líder</div>
+            <div class="header-sub">Novo líder dos 12 na sua rede</div>
+        </div>
+    </div>
+    <a href="dashboard.html" class="btn-voltar">Voltar</a>
+</div>
+
+<div class="content">
+    <div class="page-icon" style="font-size:1.4rem;font-weight:900;color:var(--gold);opacity:.7">12</div>
+    <div class="page-title">Aprovar Novo Líder</div>
+    <div class="page-sub">O aprovado receberá acesso via WhatsApp e poderá montar sua rede</div>
+
+    <div class="form-card">
+        <div class="alert alert-error" id="formError"></div>
+        <div class="alert alert-success" id="formSuccess">Líder aprovado! Senha de acesso enviada por WhatsApp.</div>
+
+        <div class="form-field">
+            <label>Nome completo *</label>
+            <input type="text" id="discNome" placeholder="Nome do discípulo">
+        </div>
+
+        <div class="form-row">
+            <div class="form-field">
+                <label>CPF *</label>
+                <input type="text" id="discCpf" placeholder="000.000.000-00" maxlength="14">
+                <div class="form-hint">Necessário para criar o login do líder</div>
+            </div>
+            <div class="form-field">
+                <label>Telefone/WhatsApp *</label>
+                <input type="tel" id="discTel" placeholder="(00) 00000-0000" maxlength="15">
+                <div class="form-hint">Receberá a senha de acesso por aqui</div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-field">
+                <label>Gênero *</label>
+                <select id="discGenero">
+                    <option value="">Selecione...</option>
+                    <option value="M">Masculino</option>
+                    <option value="F">Feminino</option>
+                </select>
+                <div class="form-hint">Determina a linhagem (homem → pastor / mulher → pastora)</div>
+            </div>
+            <div class="form-field">
+                <label>Rede / Célula *</label>
+                <input type="text" id="discRede" placeholder="Nome da rede">
+                <div class="form-hint">Nome da rede que este líder irá liderar</div>
+                <div class="color-picker-label">Cor da Rede</div>
+                <div class="color-picker" id="colorPicker"></div>
+                <div class="rede-preview" id="redePreview">
+                    <div class="rede-preview-dot" id="previewDot"></div>
+                    <div class="rede-preview-text" id="previewText">Rede Esperança</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-field">
+                <label>E-mail</label>
+                <input type="email" id="discEmail" placeholder="email@exemplo.com">
+            </div>
+            <div class="form-field">
+                <label>Data de início</label>
+                <input type="date" id="discDataInicio">
+            </div>
+        </div>
+
+        <button class="btn-salvar" id="btnSalvar">Aprovar Discípulo</button>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer-verse">"Assim como o ferro afia o ferro, o homem afia o seu companheiro"</div>
+    <div class="footer-ref">Provérbios 27:17</div>
+    <div class="footer-ministry">Ministério Apostólico Sião &nbsp;•&nbsp; Visão Celular M12</div>
+</div>
+
+<script>
+const API = 'https://workflow.autrix.com.br/webhook';
+
+async function api(endpoint, body = {}) {
+    try {
+        const res = await fetch(`${API}/${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        return await res.json();
+    } catch (e) {
+        console.error(`Erro API [${endpoint}]:`, e);
+        return null;
+    }
+}
+
+// SESSÃO
+let currentUser = null;
+try { const s = sessionStorage.getItem('siao_user'); if(s) currentUser = JSON.parse(s); } catch(e) {}
+
+// MÁSCARAS
+function maskCPF(v) {
+    v = v.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 9) return v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+    if (v.length > 6) return v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+    if (v.length > 3) return v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+    return v;
+}
+function maskTel(v) {
+    v = v.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 6) return v.replace(/(\d{2})(\d{5})(\d{1,4})/, '($1) $2-$3');
+    if (v.length > 2) return v.replace(/(\d{2})(\d{1,5})/, '($1) $2');
+    return v;
+}
+
+document.getElementById('discCpf').addEventListener('input', e => { e.target.value = maskCPF(e.target.value); });
+document.getElementById('discTel').addEventListener('input', e => { e.target.value = maskTel(e.target.value); });
+
+// AUTO-PREENCHER GÊNERO baseado no líder logado
+if (currentUser && currentUser.genero) {
+    const sel = document.getElementById('discGenero');
+    // Sênior pode cadastrar ambos, demais líderes só do mesmo gênero
+    if (currentUser.geracao > 0) {
+        sel.value = currentUser.genero;
+        sel.disabled = true;
+        sel.style.opacity = '.6';
+    }
+}
+
+// ===== PALETA DE CORES =====
+const CORES = [
+    {nome:'Branco',hex:'#f5f5f5'},{nome:'Preto',hex:'#1a1a1a'},
+    {nome:'Vermelho',hex:'#e53935'},{nome:'Carmesim',hex:'#c62828'},
+    {nome:'Rosa',hex:'#ec407a'},{nome:'Fúcsia',hex:'#d81b60'},
+    {nome:'Roxo',hex:'#8e24aa'},{nome:'Violeta',hex:'#6a1b9a'},
+    {nome:'Índigo',hex:'#5c6bc0'},{nome:'Azul Royal',hex:'#1e88e5'},
+    {nome:'Azul Claro',hex:'#42a5f5'},{nome:'Ciano',hex:'#00bcd4'},
+    {nome:'Turquesa',hex:'#009688'},{nome:'Verde Água',hex:'#26a69a'},
+    {nome:'Verde',hex:'#43a047'},{nome:'Verde Lima',hex:'#7cb342'},
+    {nome:'Oliva',hex:'#9e9d24'},{nome:'Dourado',hex:'#c9a84c'},
+    {nome:'Âmbar',hex:'#ffb300'},{nome:'Laranja',hex:'#fb8c00'},
+    {nome:'Tangerina',hex:'#f4511e'},{nome:'Marrom',hex:'#8d6e63'},
+    {nome:'Grafite',hex:'#78909c'},{nome:'Prata',hex:'#b0bec5'},
+    {nome:'Ardósia',hex:'#546e7a'},{nome:'Aço',hex:'#455a64'}
+];
+
+let selectedColor = '';
+
+function buildColorPicker() {
+    const picker = document.getElementById('colorPicker');
+    picker.innerHTML = CORES.map(c => {
+        const attr = c.hex==='#f5f5f5' ? 'data-light' : (c.hex==='#1a1a1a' ? 'data-dark' : '');
+        return `<div class="c-swatch ${c.hex===selectedColor?'active':''}" style="background:${c.hex}" ${attr} title="${c.nome}" onclick="selectColor('${c.hex}')"></div>`;
+    }).join('');
+}
+
+function selectColor(hex) {
+    selectedColor = hex;
+    buildColorPicker();
+    updateRedePreview();
+}
+
+function updateRedePreview() {
+    const nome = document.getElementById('discRede').value.trim();
+    const preview = document.getElementById('redePreview');
+    if (nome && selectedColor) {
+        // Branco no dark precisa de ajuste para não sumir
+        const displayColor = selectedColor === '#f5f5f5' ? '#ddd' : selectedColor;
+        const dotBorder = selectedColor === '#f5f5f5' ? '1px solid rgba(255,255,255,.2)' : (selectedColor === '#1a1a1a' ? '1px solid rgba(255,255,255,.15)' : 'none');
+        preview.classList.add('visible');
+        preview.style.borderLeftColor = displayColor;
+        document.getElementById('previewDot').style.background = displayColor;
+        document.getElementById('previewDot').style.border = dotBorder;
+        document.getElementById('previewText').textContent = nome;
+        document.getElementById('previewText').style.color = displayColor;
+        document.getElementById('discRede').style.borderColor = displayColor;
+        document.getElementById('discRede').style.boxShadow = `0 0 0 3px ${displayColor}18`;
+    } else {
+        preview.classList.remove('visible');
+        document.getElementById('discRede').style.borderColor = '';
+        document.getElementById('discRede').style.boxShadow = '';
+    }
+}
+
+document.getElementById('discRede').addEventListener('input', updateRedePreview);
+buildColorPicker();
+
+// SALVAR
+document.getElementById('btnSalvar').addEventListener('click', async () => {
+    const nome = document.getElementById('discNome').value.trim();
+    const cpf = document.getElementById('discCpf').value.trim();
+    const tel = document.getElementById('discTel').value.trim();
+    const genero = document.getElementById('discGenero').value;
+    const rede = document.getElementById('discRede').value.trim();
+    const email = document.getElementById('discEmail').value.trim();
+    const dataInicio = document.getElementById('discDataInicio').value;
+
+    const err = document.getElementById('formError');
+    const suc = document.getElementById('formSuccess');
+    err.style.display = 'none';
+    suc.style.display = 'none';
+
+    // Validações obrigatórias
+    if (!nome) {
+        err.textContent = 'Preencha o nome do líder.';
+        err.style.display = 'block'; return;
+    }
+    if (!cpf || cpf.replace(/\D/g, '').length < 11) {
+        err.textContent = 'CPF inválido. Necessário para criar o login.';
+        err.style.display = 'block'; return;
+    }
+    if (!tel || tel.replace(/\D/g, '').length < 10) {
+        err.textContent = 'Telefone/WhatsApp obrigatório para envio da senha.';
+        err.style.display = 'block'; return;
+    }
+    if (!genero) {
+        err.textContent = 'Selecione o gênero.';
+        err.style.display = 'block'; return;
+    }
+    if (!rede) {
+        err.textContent = 'Informe o nome da rede deste líder.';
+        err.style.display = 'block'; return;
+    }
+
+    const btn = document.getElementById('btnSalvar');
+    btn.textContent = 'APROVANDO...'; btn.disabled = true;
+
+    // Passo 1: Cadastra o discípulo
+    const discResult = await api('discipulos', {
+        acao: 'criar',
+        nome: nome,
+        cpf: cpf,
+        telefone: tel,
+        genero: genero,
+        rede: rede,
+        cor: selectedColor || null,
+        email: email,
+        data_inicio: dataInicio || null,
+        lider_id: currentUser ? currentUser.id : null
+    });
+
+    const disc = Array.isArray(discResult) ? discResult[0] : discResult;
+
+    if (!disc || !disc.id) {
+        btn.textContent = 'APROVAR DISCÍPULO'; btn.disabled = false;
+        err.textContent = (disc && disc.erro) || 'Erro ao cadastrar. Tente novamente.';
+        err.style.display = 'block';
+        return;
+    }
+
+    // Passo 2: Promove a líder (cria login + envia WhatsApp)
+  const promoResult = await api('promover', {
+        discipulo_id: disc.id,
+        cpf: cpf,
+        lider_id: currentUser ? currentUser.id : null,
+        geracao_nova: currentUser ? (currentUser.geracao + 1) : 1
+    });
+    btn.textContent = 'APROVAR DISCÍPULO'; btn.disabled = false;
+
+    const promo = Array.isArray(promoResult) ? promoResult[0] : promoResult;
+    if (promo && (promo.id || promo.sucesso)) {
+        suc.style.display = 'block';
+        // Limpar campos
+        document.getElementById('discNome').value = '';
+        document.getElementById('discCpf').value = '';
+        document.getElementById('discTel').value = '';
+        document.getElementById('discRede').value = '';
+        document.getElementById('discEmail').value = '';
+        document.getElementById('discDataInicio').value = '';
+        if (currentUser && currentUser.geracao === 0) {
+            document.getElementById('discGenero').value = '';
+        }
+        selectedColor = '';
+        buildColorPicker();
+        updateRedePreview();
+        setTimeout(() => { suc.style.display = 'none'; }, 4000);
+    } else {
+        // Discípulo foi cadastrado mas promoção falhou
+        err.textContent = 'Cadastrado, mas erro ao criar login. Verifique se o CPF já possui acesso. Use "Legitimar" em Meus Discípulos.';
+        err.style.display = 'block';
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ministério Apostólico Sião — Portal M12</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#3d3d3d;
+        }
+        body{
+            font-family:'Montserrat',sans-serif;
+            background:var(--bg);
+            min-height:100vh;
+            margin:0;
+        }
+
+        /* FLOATING ANIMATION */
+        @keyframes float{
+            0%,100%{transform:translateY(0)}
+            50%{transform:translateY(-6px)}
+        }
+        .float-logo{animation:float 3s ease-in-out infinite}
+        .float-logo:nth-child(2){animation-delay:.5s}
+
+        /* ===== SPLASH / COVER PAGE ===== */
+        .splash-page{
+            min-height:100vh;
+            display:flex;flex-direction:column;
+            align-items:center;justify-content:center;
+            padding:40px 20px;
+            background:var(--bg);
+            position:relative;overflow:hidden;
+        }
+        .splash-page::before{
+            content:'';position:absolute;top:0;left:0;right:0;bottom:0;
+            background:radial-gradient(ellipse at 50% 30%,rgba(255,255,255,.08) 0%,transparent 70%);
+            pointer-events:none;
+        }
+
+        /* LOGOS */
+        .splash-logos{
+            display:flex;flex-direction:column;align-items:center;gap:16px;
+            position:relative;z-index:1;margin-bottom:40px;
+        }
+        .splash-logos img:first-child{opacity:.95}
+        .splash-logos img:last-child{height:65px;opacity:.85}
+
+        /* LINHA DECORATIVA */
+        .splash-line{
+            width:50px;height:2px;background:#fff;opacity:.25;
+            border-radius:2px;margin:8px 0 28px;position:relative;z-index:1;
+        }
+
+        /* TEXTOS — MAIS VISÍVEIS */
+        .splash-text{
+            color:#c0c0c0;
+            font-size:.9rem;
+            font-weight:600;
+            letter-spacing:3px;
+            text-transform:uppercase;
+            text-align:center;
+            position:relative;z-index:1;
+            margin-bottom:10px;
+        }
+        .splash-subtitle{
+            color:#999;
+            font-size:.72rem;
+            font-weight:400;
+            letter-spacing:2px;
+            text-transform:uppercase;
+            text-align:center;
+            position:relative;z-index:1;
+            margin-bottom:52px;
+        }
+
+        /* BOTÃO */
+        .btn-welcome{
+            padding:16px 52px;
+            background:transparent;
+            border:1px solid rgba(201,168,76,.3);
+            color:#c9a84c;
+            border-radius:8px;
+            font-family:'Montserrat',sans-serif;
+            font-size:.85rem;
+            font-weight:600;
+            letter-spacing:2px;
+            text-transform:uppercase;
+            cursor:pointer;
+            transition:all .4s ease;
+            position:relative;z-index:1;
+            text-decoration:none;
+            display:inline-block;
+        }
+        .btn-welcome:hover{
+            background:linear-gradient(135deg,#a08234 0%,#c9a84c 40%,#e8cc6a 60%,#c9a84c 80%,#a08234 100%);
+            color:#1a1a1a;border-color:rgba(201,168,76,.5);
+            transform:translateY(-2px);
+            box-shadow:0 8px 30px rgba(201,168,76,.18);
+        }
+
+        /* VERSÍCULO */
+        .splash-verse{
+            position:absolute;bottom:32px;
+            text-align:center;
+            color:#999;
+            font-size:.72rem;
+            font-style:italic;
+            line-height:1.7;
+            z-index:1;
+        }
+        .splash-verse strong{
+            color:#bbb;
+            font-style:normal;
+        }
+
+        /* FADE-OUT (para transição futura) */
+        .splash-page.fade-out{
+            opacity:0;transform:scale(1.02);
+            transition:all .5s ease;pointer-events:none;
+        }
+
+        /* MOBILE */
+        @media(max-width:480px){
+            .splash-text{font-size:.82rem;letter-spacing:2.5px}
+            .splash-subtitle{font-size:.65rem;letter-spacing:1.5px;margin-bottom:40px}
+            .btn-welcome{padding:14px 40px;font-size:.78rem}
+            .splash-verse{font-size:.65rem;bottom:24px;padding:0 20px}
+        }
+    </style>
+</head>
+<body>
+
+<div class="splash-page" id="splashPage">
+    <div class="splash-logos">
+        <img class="float-logo" src="data:image/png;base64,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" alt="Sião" style="height:28px">
+        <img class="float-logo" src="data:image/png;base64,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" alt="M12" style="height:34px">
+    </div>
+
+    <div class="splash-line"></div>
+
+    <div class="splash-text">Ministério Apostólico Sião</div>
+    <div class="splash-subtitle">Visão Celular M12 — Portal de Discipulado</div>
+
+    <a href="login.html" class="btn-welcome">Seja Bem-Vindo</a>
+
+    <div class="splash-verse">
+        "Ide e fazei discípulos de todas as nações"<br>
+        <strong>Mateus 28:19</strong>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — Portal M12</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg:#3d3d3d;--bg2:#2d2d2d}
+        body{
+            font-family:'Montserrat',sans-serif;
+            background:var(--bg);
+            min-height:100vh;
+            display:flex;flex-direction:column;
+            align-items:center;justify-content:center;
+            padding:20px;
+        }
+
+        /* FLOATING ANIMATION */
+        @keyframes float{
+            0%,100%{transform:translateY(0)}
+            50%{transform:translateY(-6px)}
+        }
+        .float-logo{animation:float 3s ease-in-out infinite}
+        .float-logo:nth-child(2){animation-delay:.5s}
+
+        /* LOGOS */
+        .login-logo{
+            display:flex;flex-direction:column;
+            align-items:center;justify-content:center;
+            gap:10px;margin-bottom:36px;
+        }
+        .login-logo img:first-child{opacity:.9}
+        .login-logo img:last-child{opacity:.85}
+
+        /* CONTAINER */
+        .login-container{
+            background:var(--bg2);
+            border-radius:12px;
+            width:100%;max-width:420px;
+            border:1px solid rgba(255,255,255,.08);
+            padding:30px 32px 34px;
+        }
+
+        .tab-title{
+            color:#e0e0e0;
+            font-size:.95rem;
+            font-weight:600;
+            text-align:center;
+            margin-bottom:22px;
+            letter-spacing:.5px;
+        }
+
+        /* FORM */
+        .form-field{margin-bottom:14px}
+        .form-field label{
+            display:block;color:#bbb;
+            font-size:.68rem;font-weight:500;
+            margin-bottom:4px;letter-spacing:.5px;
+            text-transform:uppercase;
+        }
+        .form-field input{
+            width:100%;padding:11px 13px;
+            background:rgba(255,255,255,.06);
+            border:1px solid rgba(255,255,255,.12);
+            border-radius:7px;color:#fff;
+            font-family:'Montserrat',sans-serif;
+            font-size:.85rem;transition:all .3s;
+        }
+        .form-field input:focus{
+            outline:none;
+            border-color:rgba(255,255,255,.35);
+            background:rgba(255,255,255,.1);
+        }
+        .form-field input::placeholder{color:#555}
+
+        /* PASSWORD TOGGLE */
+        .pw-wrap{position:relative}
+        .pw-wrap input{padding-right:42px}
+        .pw-toggle{
+            position:absolute;right:10px;top:50%;
+            transform:translateY(-50%);
+            background:none;border:none;
+            color:#888;cursor:pointer;
+            font-size:1.1rem;padding:4px;line-height:1;
+        }
+        .pw-toggle:hover{color:#ccc}
+
+        /* ALERTS */
+        .alert{
+            padding:10px;border-radius:7px;
+            font-size:.75rem;margin-bottom:14px;
+            text-align:center;display:none;
+        }
+        .alert-error{
+            background:rgba(220,53,69,.15);
+            border:1px solid rgba(220,53,69,.3);
+            color:#ff6b6b;
+        }
+
+        /* BUTTON */
+        .btn-primary{
+            width:100%;padding:14px;
+            background:transparent;
+            border:1px solid rgba(201,168,76,.3);
+            color:#c9a84c;
+            border-radius:8px;
+            font-family:'Montserrat',sans-serif;
+            font-size:.85rem;font-weight:600;
+            letter-spacing:2px;text-transform:uppercase;
+            cursor:pointer;transition:all .4s ease;
+            margin-top:6px;
+        }
+        .btn-primary:hover{
+            background:linear-gradient(135deg,#a08234 0%,#c9a84c 40%,#e8cc6a 60%,#c9a84c 80%,#a08234 100%);
+            color:#1a1a1a;border-color:rgba(201,168,76,.5);
+            transform:translateY(-2px);
+            box-shadow:0 6px 24px rgba(201,168,76,.18);
+        }
+        .btn-primary:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+        /* LINK PRIMEIRO ACESSO */
+        .link-section{text-align:center;margin-top:18px}
+        .link-section a{
+            color:#aaa;font-size:.74rem;
+            text-decoration:underline;
+            transition:color .3s;
+        }
+        .link-section a:hover{color:#fff}
+
+        /* FOOTER */
+        .login-footer{
+            text-align:center;margin-top:24px;
+            color:#999;font-size:.7rem;
+            font-style:italic;line-height:1.7;
+            max-width:420px;
+        }
+        .login-footer strong{color:#bbb;font-style:normal}
+
+        /* MOBILE */
+        @media(max-width:480px){
+            body{padding:16px}
+            .login-container{padding:24px 20px 28px}
+            .tab-title{font-size:.88rem}
+        }
+    </style>
+</head>
+<body>
+
+<!-- LOGOS -->
+<div class="login-logo">
+    <img class="float-logo" src="data:image/png;base64,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" alt="Sião" style="height:20px">
+    <img class="float-logo" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACcAAAA3CAYAAACPdVOuAAAI1ElEQVR42u2ZbZBWZRnH/9ezz76QEi/yarwolBkgamF+gEjDSTPHZoiYJplxprIMM6xm1MZwrMbxS401TWgNmQkGOMTAYKM0kkJFAaaBUPiyvAgI7C6w6O6yu+w+vz74P+vN4XlWtlHyQ2dm5+y5z32u+39f9/Xyv64nJAkYKelmSVdJGiPpbEkFnbmrJKlF0quSnpL0QEQcDGCCpGWSJkp6VtJBSd2SipLiDABDUpekKkkjJE2RtF3SbAGrgA7gWr0HLuCzQCewMoDDkjZHxDV+Wcjt6t2+ek4nIkrGsEbSx4qS6iQ1G1RERPeZVlaitSo/H5NUV/BDGDX/61M1joLOsEf2+fo/uP/2KpZx5Ug8CP8fiT1kc7KNlSKCnIxC6n0V1qj4fUVwnkgFb0o9ujv1stTLk00U8gCTuen3hXIbKae5cyQN8WOjpNGShkqqj4hdnnO2pIslVUvaHhGN1oYiAuAiSR0R8RIQmWYMohsYKGmCpE5JWyOiMxdfe8C0AMuS5x/z5rUPeAFo9/MbwD3A1cB23rr2AV/zt9W+rwRKwK0ZqGxx4Eag3t92Ac8C0/2u6PtyoOUkcBZyHbABaDKgRcAdwPMGehg45k3MB/Z4oVmZPQEzgQNAA/CBZOM3GHQTsBBY5lT1GvChTPuVwNX4/l0v+MtE8FjgZeA48K1k/HKD3QTUJBp6yJq5NAH9Q+AIcF3y/fe81n3J2HKgpVDmmAuS3ufHNRbaLyL2SNpmL1sDVAG1EbFR0h9tgxdGRMkySomn2xzjbkmTI+Jxb6Ra0iOSWm2Dp8S5yHlryYKzdIKkLqv8ROZl9jg8/i9JNXaeXkNIROyzx3ZGxAmDqpXUXM5be+NsaXjIgCgBn41X+7HrtGjImx47WtKnJN1pLrf8bUNJH68M/GRJxyXt7i0bRUQXMEDSvZJmSRrucHJPRKwGihHRlQcXpitVvme2WEg8qCrRcpWPqBs4X9JUSVsl7bS9kdraW6dKtaSHJM2UVC9psaQVEbHB8k/ik9mxnrANHfeENr9v9bFlR9Hp8eYk5VwjaaCkRyPihJ2kA8g00J4c5RWSPidpnaQvRERjetSJbZYkRVFSm6SJwE999t2SLpH0uqTvAE2StgDzJF3mDdwH3BERDdZah6QZwFOSdgB3SbpW0hFJDwI3RcQOe7Qk9ZP0gDNN6oCZPV8oqUUOlo2Od9lfE7DbAXO2d/ME0Aq86rh2gcdXOzC3A5/22DLHw10O5B/3+J2WfwB4HWiu8NcAvBZAi6S1km6xrZVyIaYxItqAoZLOsj11SzpoAx9pqt8tqSEi2nNz8dxOYJBNoLsC6w6PPyBpuoA2YMl7iccBjwEtxcQrC4nm8ryeHM9TjttFpbHexiuQ354aopgKsFeWKgROyh1FufG+zM1prAfHOxGE8+w2BfHO0/Q+AMmoNhHRXYaqZ0G7lOTodw9cxv2zpJ/ap6N/naT2iDiRL84NttQXkMU+ADuJ+wOXSfqkWcUFkkY6QNcBhyS97IbMuojYlIHN1xtvt2hbyoTLaSshkLXA14GtDpaHTRRfAX7j4P0w8KLHD3veNmAuUJcw7qjAJU9iwhXBpc/A9WbCbcCDwCxgL/A4cA4w0pljLDDIdcR+YDbwC2eXemBmOfl9ApdMrAYWWBO/BcZ5/Elgc6KNycBRYEry3QZgrZ/PA35tOb8CantZszK45D4QWO88mPL+ua4PxiVH/xGDuzihWWNcwNyWfPsZz9sADK6wbnlwXiiA/sDTwHPAqMTm+vu4fpQrinrA5cbnA4eAAYm2Rrog+rPHI2fbPQUOucSbqXmhpCsk/c21gyKiQ9Ln3TP+ucNHD1FNUmGVx6slLXB98UV/nzHoDZKmmXxGuXpGpjSP5Yri25Miut7aXe26cyOwoIynjbbmxpd59zPgH8CX7CitplM/sBPdlVt/eZb4uxLEXeZp90qaFxELgPslXS/pBkk/MVEcAqyS9KI74AclDXZQvtpxboQ78x+WNMktjfslbZE0V9KqiGgG9pqQrpC046T+jO1ndbLLFcCmdCfJu1s8fz7we9vjbttUE3DQ90Mef87y7nbYuS0nL9PUX3MYVgFH5X5IBuYi4AQwI4vmNtRaO8si4A+5BWrt1VN9rFf6uTY3byWw1HJqLDcraqZ73aw7sBF4peBybow95SvuGq3NqquIwIaMpEsl/R0oZotHREdENEs6ZByHIqI5M36DL9qxLjEJ6EyKnkJErPdx32TAYyXVFyQ975bXNP+C87us/MtRocGuM//p2rIr1a49UpJO0oqkLs/fYrsbWqG7uljSlc7XQyRtLEh62hXY983vn8hV9Rm4Ue7H7cw1FcmRyFOefd/pDY/JgcrWedIhar57J2sLVvc2oz4o6aWc0AzcuY53DX38ASWb1+QS8twK7+sl7fcJbpO0sRAR7ZKWmj7tcEFcnQTTou/DXCC35boDVRWCcP59mynV8JzcAlDtpk69cSyNiPai7eURSfMkTQGGRERTvh/idNQaEa3l+iXAUWv5WL7nm80DWiXVlHnfDQxx0b5T0iIgIiN/wBxJi/yT4i5Jgywgo9rn2e7+UqaCwvZyuaTN7haUmzNV0gEDyFJnlaSjks63Q86JiEeBqqKBVUXEYuAqSTc6LDxj2p21KKqTVkK5K4trNb3MCcvpl8htdwYaLunhDFgPW84YAfB+YJ1z6bdzQfQbwL97YdSjHITH9TLnBfdc0rFbvd4zXv9UlpzQlRHmWjiqT/L4HPdJzjKRrHYwrvF9ksF9NDde47n9nOy/bHkTnOBx+hpRqVTIAxwELPGHjWYpN7sBU1Ph2w8a3MRKsp2Xv+mGeIPlL3EPpTKwCnXDXCds3AU/4O73NGC8tTwCGOaxI86tw5J34513bze4I5a3F5hbqZ5Qpb5F7teYUZK+apI5VlJ/B9NjjltpsK7zuzS79JM0wA7zhqQ97v8ujIj96VqnBa7cb1pW/QxJn3APeLSBFpJQkW+flQxon3Prekl/ioijp1PD/gfMIngl1KpRUgAAAABJRU5ErkJggg==" alt="M12" style="height:25px">
+</div>
+
+<!-- LOGIN -->
+<div class="login-container" id="loginContainer">
+    <div class="tab-title">Acesso do Líder</div>
+
+    <div class="alert alert-error" id="loginError">CPF ou senha incorretos.</div>
+
+    <div class="form-field">
+        <label>CPF</label>
+        <input type="text" id="loginCpf" placeholder="000.000.000-00" maxlength="14" autocomplete="username">
+    </div>
+
+    <div class="form-field">
+        <label>Senha</label>
+        <div class="pw-wrap">
+            <input type="password" id="loginSenha" placeholder="Digite sua senha" inputmode="numeric" pattern="[0-9]*" autocomplete="current-password">
+            <button type="button" class="pw-toggle" onclick="togglePw('loginSenha')">&#128065;</button>
+        </div>
+    </div>
+
+    <button class="btn-primary" id="btnLogin">Entrar</button>
+
+    <div class="link-section" id="primeiroAcessoLink">
+        <a href="cadastro-lider.html">Primeiro Acesso? Cadastre-se aqui</a>
+    </div>
+</div>
+
+<!-- VERSÍCULO -->
+<div class="login-footer">
+    "Assim como o ferro afia o ferro,<br>
+    o homem afia o seu companheiro"<br>
+    <strong>Provérbios 27:17</strong>
+</div>
+
+<script>
+// ===== API CONFIG =====
+const API = 'https://workflow.autrix.com.br/webhook';
+
+async function api(endpoint, body = {}) {
+    try {
+        const res = await fetch(`${API}/${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        return await res.json();
+    } catch (e) {
+        console.error(`Erro API [${endpoint}]:`, e);
+        return null;
+    }
+}
+
+// ===== RESTAURAR SESSÃO =====
+(function restoreSession() {
+    try {
+        const saved = sessionStorage.getItem('siao_user');
+        if (saved) {
+            window.location.href = 'dashboard.html';
+        }
+    } catch(e) {}
+})();
+
+// ===== TOGGLE SENHA =====
+function togglePw(id) {
+    const inp = document.getElementById(id);
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+// ===== MÁSCARA CPF =====
+function maskCPF(v) {
+    v = v.replace(/\D/g, '').slice(0, 11);
+    if (v.length > 9) return v.replace(/(\d{3})(\d{3})(\d{3})(\d{1,2})/, '$1.$2.$3-$4');
+    if (v.length > 6) return v.replace(/(\d{3})(\d{3})(\d{1,3})/, '$1.$2.$3');
+    if (v.length > 3) return v.replace(/(\d{3})(\d{1,3})/, '$1.$2');
+    return v;
+}
+document.getElementById('loginCpf').addEventListener('input', e => {
+    e.target.value = maskCPF(e.target.value);
+});
+
+// ===== VALIDAÇÃO: APENAS NÚMEROS EM SENHAS =====
+document.getElementById('loginSenha').addEventListener('input', e => {
+    e.target.value = e.target.value.replace(/\D/g, '');
+});
+
+// ===== VERIFICAR PRIMEIRO ACESSO =====
+(async function checkPrimeiroAcesso() {
+    try {
+        const res = await api('primeiro-acesso', { acao: 'check' });
+        const data = Array.isArray(res) ? res[0] : res;
+        if (data && !data.vazio) {
+            document.getElementById('primeiroAcessoLink').style.display = 'none';
+        }
+    } catch(e) {}
+})();
+
+// ===== LOGIN =====
+document.getElementById('btnLogin').addEventListener('click', async () => {
+    const cpf = document.getElementById('loginCpf').value;
+    const senha = document.getElementById('loginSenha').value;
+    const err = document.getElementById('loginError');
+    const btn = document.getElementById('btnLogin');
+
+    if (!cpf || !senha) {
+        err.textContent = 'Preencha CPF e senha.';
+        err.style.display = 'block';
+        return;
+    }
+
+    btn.textContent = 'ENTRANDO...'; btn.disabled = true;
+
+    const raw = await api('auth/login', { cpf, senha });
+    const data = Array.isArray(raw) ? raw[0] : raw;
+
+    if (data && data.sucesso) {
+        err.style.display = 'none';
+        const user = data.usuario;
+
+        if (user.primeiro_acesso) {
+            // Salvar temporário e redirecionar para trocar senha
+            sessionStorage.setItem('siao_temp_user', JSON.stringify(user));
+            window.location.href = 'trocar-senha.html';
+        } else {
+            sessionStorage.setItem('siao_user', JSON.stringify(user));
+            window.location.href = 'dashboard.html';
+        }
+    } else {
+        err.textContent = (data && data.erro) || 'CPF ou senha incorretos.';
+        err.style.display = 'block';
+    }
+
+    btn.textContent = 'ENTRAR'; btn.disabled = false;
+});
+
+// Enter para submeter
+document.getElementById('loginSenha').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('btnLogin').click();
+});
+document.getElementById('loginCpf').addEventListener('keydown', e => {
+    if (e.key === 'Enter') document.getElementById('loginSenha').focus();
+});
+</script>
+
+</body>
+</html>
