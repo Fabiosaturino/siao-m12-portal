@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Liderança Sênior — Portal M12</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#3d3d3d;--bg2:#2d2d2d;
+            --blue:#4a90c4;--blue-soft:rgba(74,144,196,.12);--blue-border:rgba(74,144,196,.25);
+            --lilac:#a87cc4;--lilac-soft:rgba(168,124,196,.12);--lilac-border:rgba(168,124,196,.25);
+            --gold:#c9a84c;--gold-dark:#a08234;--gold-light:#e8cc6a;
+        }
+        body{
+            font-family:'Montserrat',sans-serif;
+            background:var(--bg);
+            min-height:100vh;
+            display:flex;flex-direction:column;
+            align-items:center;
+            padding:20px 20px 40px;
+        }
+
+        @keyframes float{
+            0%,100%{transform:translateY(0)}
+            50%{transform:translateY(-6px)}
+        }
+        .float-logo{animation:float 3s ease-in-out infinite}
+        .float-logo:nth-child(2){animation-delay:.5s}
+
+        .login-logo{
+            display:flex;flex-direction:column;
+            align-items:center;justify-content:center;
+            gap:10px;margin:30px 0 28px;
+        }
+        .login-logo img:first-child{opacity:.9}
+        .login-logo img:last-child{opacity:.85}
+
+        .page-title{
+            color:#c0c0c0;font-size:.85rem;font-weight:600;
+            letter-spacing:2px;text-transform:uppercase;
+            text-align:center;margin-bottom:6px;
+        }
+        .page-subtitle{
+            color:#888;font-size:.68rem;letter-spacing:1px;
+            text-align:center;margin-bottom:28px;
+        }
+
+        /* ===== BLOCOS ===== */
+        .section-block{
+            background:var(--bg2);
+            border-radius:14px;
+            width:100%;max-width:420px;
+            padding:26px 28px 28px;
+            margin-bottom:18px;
+            transition:all .3s;
+        }
+        .section-block.masc{
+            border:1px solid var(--blue-border);
+            box-shadow:0 2px 16px rgba(74,144,196,.06);
+        }
+        .section-block.fem{
+            border:1px solid var(--lilac-border);
+            box-shadow:0 2px 16px rgba(168,124,196,.06);
+        }
+
+        /* HEADER DO BLOCO */
+        .section-header{
+            display:flex;align-items:center;gap:12px;
+            margin-bottom:20px;padding-bottom:14px;
+        }
+        .masc .section-header{border-bottom:1px solid var(--blue-border)}
+        .fem .section-header{border-bottom:1px solid var(--lilac-border)}
+
+        .section-icon{
+            width:36px;height:36px;border-radius:10px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:1rem;flex-shrink:0;
+        }
+        .masc .section-icon{background:var(--blue-soft);color:var(--blue)}
+        .fem .section-icon{background:var(--lilac-soft);color:var(--lilac)}
+
+        .section-title{
+            font-size:.82rem;font-weight:700;color:#e0e0e0;
+            text-transform:uppercase;letter-spacing:1px;
+            transition:all .3s;
+        }
+        .section-sub{
+            font-size:.58rem;color:#777;margin-top:2px;
+            letter-spacing:.3px;font-weight:400;
+        }
+
+        /* ===== BOTÕES TÍTULO (Pastor/Apóstolo) ===== */
+        .titulo-btns{
+            display:flex;gap:8px;margin-bottom:18px;
+        }
+        .titulo-btn{
+            flex:1;padding:9px 12px;
+            background:rgba(255,255,255,.03);
+            border-radius:8px;
+            font-family:'Montserrat',sans-serif;
+            font-size:.7rem;font-weight:600;
+            text-align:center;cursor:pointer;
+            transition:all .3s;letter-spacing:.5px;
+        }
+        /* Masculino */
+        .masc .titulo-btn{
+            border:1px solid rgba(74,144,196,.15);
+            color:#6a9dc4;
+        }
+        .masc .titulo-btn:hover{
+            border-color:rgba(74,144,196,.35);color:var(--blue);
+        }
+        .masc .titulo-btn.active{
+            background:var(--blue-soft);
+            border-color:var(--blue);color:var(--blue);
+        }
+        /* Feminino */
+        .fem .titulo-btn{
+            border:1px solid rgba(168,124,196,.15);
+            color:#b09ac4;
+        }
+        .fem .titulo-btn:hover{
+            border-color:rgba(168,124,196,.35);color:var(--lilac);
+        }
+        .fem .titulo-btn.active{
+            background:var(--lilac-soft);
+            border-color:var(--lilac);color:var(--lilac);
+        }
+
+        /* ===== FORM FIELDS ===== */
+        .form-field{margin-bottom:14px}
+        .form-field label{
+            display:block;color:#bbb;font-size:.66rem;font-weight:500;
+            margin-bottom:4px;letter-spacing:.5px;text-transform:uppercase;
+        }
+        .form-field input{
+            width:100%;padding:11px 13px;
+            background:rgba(255,255,255,.05);
+            border:1px solid rgba(255,255,255,.1);
+            border-radius:7px;color:#fff;
+            font-family:'Montserrat',sans-serif;
+            font-size:.85rem;transition:all .3s;
+        }
+        .masc .form-field input:focus{
+            outline:none;border-color:var(--blue);
+            background:rgba(74,144,196,.06);
+            box-shadow:0 0 0 3px rgba(74,144,196,.08);
+        }
+        .fem .form-field input:focus{
+            outline:none;border-color:var(--lilac);
+            background:rgba(168,124,196,.06);
+            box-shadow:0 0 0 3px rgba(168,124,196,.08);
+        }
+        .form-field input::placeholder{color:#555}
+
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+        @media(max-width:480px){.form-row{grid-template-columns:1fr}}
+
+        .pw-wrap{position:relative}
+        .pw-wrap input{padding-right:42px}
+        .pw-toggle{
+            position:absolute;right:10px;top:50%;transform:translateY(-50%);
+            background:none;border:none;color:#666;cursor:pointer;
+            font-size:1rem;padding:4px;line-height:1;transition:color .3s;
+        }
+        .pw-toggle:hover{color:#ccc}
+
+        /* ===== ALERTS ===== */
+        .alert{
+            padding:10px;border-radius:7px;font-size:.73rem;
+            margin-bottom:14px;text-align:center;display:none;
+        }
+        .alert-error{
+            background:rgba(220,53,69,.12);
+            border:1px solid rgba(220,53,69,.25);color:#ff6b6b;
+        }
+        .alert-success{
+            background:rgba(40,167,69,.12);
+            border:1px solid rgba(40,167,69,.25);color:#6bff8e;
+        }
+
+        /* ===== BOTÃO CADASTRAR (Dourado) ===== */
+        .btn-cadastrar{
+            width:100%;padding:13px;
+            background:linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 40%, var(--gold-light) 60%, var(--gold) 80%, var(--gold-dark) 100%);
+            color:#1a1a1a;
+            border:1px solid rgba(201,168,76,.3);
+            border-radius:8px;
+            font-family:'Montserrat',sans-serif;
+            font-size:.76rem;font-weight:700;
+            letter-spacing:1px;text-transform:uppercase;
+            cursor:pointer;transition:all .3s;
+            margin-top:8px;
+            box-shadow:0 2px 12px rgba(201,168,76,.15);
+        }
+        .btn-cadastrar:hover{
+            box-shadow:0 4px 20px rgba(201,168,76,.25);
+            transform:translateY(-1px);
+            border-color:rgba(201,168,76,.5);
+        }
+        .btn-cadastrar:disabled{opacity:.5;cursor:not-allowed;transform:none;box-shadow:none}
+
+        /* ===== LINKS ===== */
+        .link-section{text-align:center;margin-top:10px}
+        .link-section a{
+            color:#aaa;font-size:.72rem;text-decoration:underline;
+            transition:color .3s;
+        }
+        .link-section a:hover{color:#fff}
+
+        .login-footer{
+            text-align:center;margin-top:28px;
+            color:#999;font-size:.7rem;font-style:italic;
+            line-height:1.7;max-width:420px;
+        }
+        .login-footer strong{color:#bbb;font-style:normal}
+
+        @media(max-width:480px){
+            body{padding:16px 16px 32px}
+            .section-block{padding:20px 18px 22px}
+            .titulo-btn{font-size:.65rem;padding:8px 10px}
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-logo">
+    <img class="float-logo" src="data:image/png;base64,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" alt="Sião" style="height:20px">
+    <img class="float-logo" src="data:image/png;base64,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" alt="M12" style="height:25px">
+</div>
+
+<div class="page-title">Primeiro Acesso</div>
+<div class="page-subtitle">Cadastro da liderança sênior</div>
+
+<!-- ===== BLOCO MASCULINO ===== -->
+<div class="section-block masc">
+    <div class="section-header">
+        <div class="section-icon">&#9794;</div>
+        <div>
+            <div class="section-title" id="tituloMasc">Pastor Sênior</div>
+            <div class="section-sub">Responsável pelos 12 homens</div>
+        </div>
+    </div>
+
+    <div class="titulo-btns">
+        <button class="titulo-btn active" onclick="setTitulo('masc','Pastor')">Pastor</button>
+        <button class="titulo-btn" onclick="setTitulo('masc','Apóstolo')">Apóstolo</button>
+    </div>
+
+    <div class="alert alert-error" id="mascError"></div>
+    <div class="alert alert-success" id="mascSuccess">Cadastro realizado!</div>
+
+    <div class="form-field">
+        <label>Nome completo *</label>
+        <input type="text" id="pastorNome" placeholder="Nome completo">
+    </div>
+    <div class="form-field">
+        <label>E-mail *</label>
+        <input type="email" id="pastorEmail" placeholder="pastor@email.com">
+    </div>
+    <div class="form-field">
+        <label>Telefone</label>
+        <input type="text" id="pastorTel" placeholder="(00) 00000-0000" maxlength="15">
+    </div>
+    <div class="form-field">
+        <label>Data de Nascimento *</label>
+        <input type="date" id="pastorNascimento">
+    </div>
+    <div class="form-row">
+        <div class="form-field">
+            <label>Senha * (números)</label>
+            <div class="pw-wrap">
+                <input type="password" id="pastorSenha" placeholder="Crie uma senha" inputmode="numeric" pattern="[0-9]*" maxlength="8">
+                <button type="button" class="pw-toggle" onclick="togglePw('pastorSenha')">&#128065;</button>
+            </div>
+        </div>
+        <div class="form-field">
+            <label>Confirmar *</label>
+            <div class="pw-wrap">
+                <input type="password" id="pastorSenha2" placeholder="Repita" inputmode="numeric" pattern="[0-9]*" maxlength="8">
+                <button type="button" class="pw-toggle" onclick="togglePw('pastorSenha2')">&#128065;</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-cadastrar" id="btnCadMasc">Cadastrar Liderança Masculina</button>
+</div>
+
+<!-- ===== BLOCO FEMININO ===== -->
+<div class="section-block fem">
+    <div class="section-header">
+        <div class="section-icon">&#9792;</div>
+        <div>
+            <div class="section-title" id="tituloFem">Pastora Sênior</div>
+            <div class="section-sub">Responsável pelas 12 mulheres</div>
+        </div>
+    </div>
+
+    <div class="titulo-btns">
+        <button class="titulo-btn active" onclick="setTitulo('fem','Pastora')">Pastora</button>
+        <button class="titulo-btn" onclick="setTitulo('fem','Apóstola')">Apóstola</button>
+    </div>
+
+    <div class="alert alert-error" id="femError"></div>
+    <div class="alert alert-success" id="femSuccess">Cadastro realizado!</div>
+
+    <div class="form-field">
+        <label>Nome completo *</label>
+        <input type="text" id="pastoraNome" placeholder="Nome completo">
+    </div>
+    <div class="form-field">
+        <label>E-mail *</label>
+        <input type="email" id="pastoraEmail" placeholder="pastora@email.com">
+    </div>
+    <div class="form-field">
+        <label>Telefone</label>
+        <input type="text" id="pastoraTel" placeholder="(00) 00000-0000" maxlength="15">
+    </div>
+    <div class="form-field">
+        <label>Data de Nascimento *</label>
+        <input type="date" id="pastoraNascimento">
+    </div>
+    <div class="form-row">
+        <div class="form-field">
+            <label>Senha * (números)</label>
+            <div class="pw-wrap">
+                <input type="password" id="pastoraSenha" placeholder="Crie uma senha" inputmode="numeric" pattern="[0-9]*" maxlength="8">
+                <button type="button" class="pw-toggle" onclick="togglePw('pastoraSenha')">&#128065;</button>
+            </div>
+        </div>
+        <div class="form-field">
+            <label>Confirmar *</label>
+            <div class="pw-wrap">
+                <input type="password" id="pastoraSenha2" placeholder="Repita" inputmode="numeric" pattern="[0-9]*" maxlength="8">
+                <button type="button" class="pw-toggle" onclick="togglePw('pastoraSenha2')">&#128065;</button>
+            </div>
+        </div>
+    </div>
+
+    <button class="btn-cadastrar" id="btnCadFem">Cadastrar Liderança Feminina</button>
+</div>
+
+<div class="link-section">
+    <a href="login.html">Já tenho acesso? Fazer login</a>
+</div>
+
+<div class="login-footer">
+    "Assim como o ferro afia o ferro,<br>
+    o homem afia o seu companheiro"<br>
+    <strong>Provérbios 27:17</strong>
+</div>
+
+<script>
+const API = 'https://workflow.autrix.com.br/webhook';
+
+async function api(endpoint, body = {}) {
+    try {
+        const res = await fetch(`${API}/${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        return await res.json();
+    } catch (e) {
+        console.error(`Erro API [${endpoint}]:`, e);
+        return null;
+    }
+}
+
+function togglePw(id) {
+    const inp = document.getElementById(id);
+    inp.type = inp.type === 'password' ? 'text' : 'password';
+}
+
+// ===== SELETOR TÍTULO =====
+const titulos = { masc: 'Pastor', fem: 'Pastora' };
+
+function setTitulo(bloco, titulo) {
+    titulos[bloco] = titulo;
+
+    // Atualizar botões
+    const block = document.querySelector(`.section-block.${bloco}`);
+    block.querySelectorAll('.titulo-btn').forEach(b => b.classList.remove('active'));
+    event.target.classList.add('active');
+
+    // Atualizar título do header
+    if (bloco === 'masc') {
+        document.getElementById('tituloMasc').textContent = titulo + ' Sênior';
+    } else {
+        document.getElementById('tituloFem').textContent = titulo + ' Sênior';
+    }
+}
+
+// ===== MÁSCARAS =====
+function maskTel(v) {
+    v = v.replace(/\D/g, '');
+    if (v.length > 11) v = v.slice(0, 11);
+    if (v.length > 6) return v.replace(/(\d{2})(\d{5})(\d{1,4})/, '($1) $2-$3');
+    if (v.length > 2) return v.replace(/(\d{2})(\d{1,5})/, '($1) $2');
+    return v;
+}
+
+// Validação de email
+function validarEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+['pastorTel', 'pastoraTel'].forEach(id => {
+    document.getElementById(id).addEventListener('input', e => { e.target.value = maskTel(e.target.value); });
+});
+['pastorSenha', 'pastorSenha2', 'pastoraSenha', 'pastoraSenha2'].forEach(id => {
+    document.getElementById(id).addEventListener('input', e => {
+        e.target.value = e.target.value.replace(/\D/g, '');
+    });
+});
+
+// ===== VALIDAÇÃO =====
+function validarBloco(nome, email, senha, senha2, label) {
+    if (!nome) return `Preencha o nome do(a) ${label}.`;
+    if (!email || !validarEmail(email)) return `E-mail do(a) ${label} inválido.`;
+    if (!senha) return `Preencha a senha do(a) ${label}.`;
+    if (senha.length < 4) return `Senha deve ter pelo menos 4 números.`;
+    if (!/^\d+$/.test(senha)) return `Senha deve conter apenas números.`;
+    if (senha !== senha2) return `As senhas não coincidem.`;
+    return null;
+}
+
+// ===== CADASTRO MASCULINO =====
+document.getElementById('btnCadMasc').addEventListener('click', async () => {
+    const err = document.getElementById('mascError');
+    const suc = document.getElementById('mascSuccess');
+    err.style.display = 'none'; suc.style.display = 'none';
+
+    const nome = document.getElementById('pastorNome').value.trim();
+    const email = document.getElementById('pastorEmail').value.trim();
+    const tel = document.getElementById('pastorTel').value.trim();
+    const nascimento = document.getElementById('pastorNascimento').value;
+    const senha = document.getElementById('pastorSenha').value;
+    const senha2 = document.getElementById('pastorSenha2').value;
+
+    const erro = validarBloco(nome, email, senha, senha2, titulos.masc);
+    if (erro) { err.textContent = erro; err.style.display = 'block'; return; }
+    if (!nascimento) { err.textContent = 'Preencha a data de nascimento.'; err.style.display = 'block'; return; }
+
+    const btn = document.getElementById('btnCadMasc');
+    btn.textContent = 'CADASTRANDO...'; btn.disabled = true;
+
+    const res = await api('primeiro-acesso', {
+        acao: 'cadastrar_senior',
+        titulo: titulos.masc,
+        nome, email, telefone: tel, genero: 'M', data_nascimento: nascimento, senha
+    });
+
+    btn.textContent = 'CADASTRAR LIDERANÇA MASCULINA'; btn.disabled = false;
+
+    const data = Array.isArray(res) ? res[0] : res;
+    if (data && data.sucesso) {
+        suc.style.display = 'block';
+        btn.disabled = true;
+        btn.style.opacity = '.4';
+    } else {
+        err.textContent = (data && data.erro) || 'Erro ao cadastrar. Tente novamente.';
+        err.style.display = 'block';
+    }
+});
+
+// ===== CADASTRO FEMININO =====
+document.getElementById('btnCadFem').addEventListener('click', async () => {
+    const err = document.getElementById('femError');
+    const suc = document.getElementById('femSuccess');
+    err.style.display = 'none'; suc.style.display = 'none';
+
+    const nome = document.getElementById('pastoraNome').value.trim();
+    const email = document.getElementById('pastoraEmail').value.trim();
+    const tel = document.getElementById('pastoraTel').value.trim();
+    const nascimento = document.getElementById('pastoraNascimento').value;
+    const senha = document.getElementById('pastoraSenha').value;
+    const senha2 = document.getElementById('pastoraSenha2').value;
+
+    const erro = validarBloco(nome, email, senha, senha2, titulos.fem);
+    if (erro) { err.textContent = erro; err.style.display = 'block'; return; }
+    if (!nascimento) { err.textContent = 'Preencha a data de nascimento.'; err.style.display = 'block'; return; }
+
+    const btn = document.getElementById('btnCadFem');
+    btn.textContent = 'CADASTRANDO...'; btn.disabled = true;
+
+    const res = await api('primeiro-acesso', {
+        acao: 'cadastrar_senior',
+        titulo: titulos.fem,
+        nome, email, telefone: tel, genero: 'F', data_nascimento: nascimento, senha
+    });
+
+    btn.textContent = 'CADASTRAR LIDERANÇA FEMININA'; btn.disabled = false;
+
+    const data = Array.isArray(res) ? res[0] : res;
+    if (data && data.sucesso) {
+        suc.style.display = 'block';
+        btn.disabled = true;
+        btn.style.opacity = '.4';
+    } else {
+        err.textContent = (data && data.erro) || 'Erro ao cadastrar. Tente novamente.';
+        err.style.display = 'block';
+    }
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Painel — Portal M12</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#3d3d3d;--bg2:#2d2d2d;--bg3:#353535;
+            --dark:#1a1a1a;--muted:#888;
+            --gold:#c9a84c;--gold-dark:#a08234;--gold-light:#e8cc6a;
+            --blue:#4a90c4;--lilac:#a87cc4;--green:#2e7d32;
+        }
+        body{
+            font-family:'Montserrat',sans-serif;
+            background:var(--bg);
+            min-height:100vh;margin:0;color:#fff;
+        }
+
+        /* ===== HEADER ===== */
+        .header{
+            background:var(--bg2);
+            padding:14px 20px;
+            display:flex;align-items:center;justify-content:space-between;
+            border-bottom:1px solid rgba(255,255,255,.06);
+            position:sticky;top:0;z-index:100;
+        }
+        .header-left{display:flex;align-items:center;gap:10px}
+        .header-logos{display:flex;align-items:center;gap:6px}
+        .header-logos img{opacity:.85}
+        .header-info{display:flex;flex-direction:column}
+        .header-title{color:#e0e0e0;font-size:.72rem;font-weight:700;letter-spacing:1px}
+        .header-sub{color:#666;font-size:.5rem;letter-spacing:.5px;margin-top:1px}
+        .header-right{display:flex;align-items:center;gap:10px}
+        .header-user{color:#ccc;font-size:.7rem;font-weight:500}
+        .header-badge{
+            padding:3px 10px;border-radius:4px;
+            font-size:.55rem;font-weight:700;
+            background:rgba(201,168,76,.12);color:var(--gold);
+            border:1px solid rgba(201,168,76,.15);
+            letter-spacing:.5px;
+        }
+        .btn-logout{
+            padding:6px 14px;background:transparent;
+            border:1px solid rgba(255,255,255,.12);
+            color:#777;border-radius:6px;
+            font-family:'Montserrat',sans-serif;
+            font-size:.58rem;font-weight:600;
+            cursor:pointer;letter-spacing:.5px;
+            transition:all .3s;text-transform:uppercase;
+        }
+        .btn-logout:hover{border-color:rgba(255,100,100,.4);color:#ff6b6b}
+
+        @media(max-width:600px){
+            .header{padding:10px 14px}
+            .header-info{display:none}
+            .header-user{font-size:.65rem}
+        }
+
+        /* ===== CONTENT ===== */
+        .content{max-width:500px;margin:0 auto;padding:16px 14px 40px}
+
+        /* ===== WELCOME ===== */
+        .welcome{
+            padding:20px 0 6px;
+            margin-bottom:4px;
+        }
+        .welcome-hello{
+            font-size:.65rem;color:#777;
+            text-transform:uppercase;letter-spacing:1.5px;
+            margin-bottom:4px;
+        }
+        .welcome-name{
+            font-size:1.1rem;font-weight:700;color:#e0e0e0;
+            letter-spacing:.5px;
+        }
+
+        /* ===== STATS COMPACTOS ===== */
+        .stats-row{
+            display:flex;gap:8px;margin-bottom:24px;
+            flex-wrap:wrap;
+        }
+        .stat-chip{
+            flex:1;min-width:0;
+            background:var(--bg2);
+            border:1px solid rgba(255,255,255,.06);
+            border-radius:10px;
+            padding:12px 10px;
+            text-align:center;
+            transition:all .3s;
+        }
+        .stat-chip:hover{border-color:rgba(255,255,255,.12)}
+        .stat-num{
+            font-size:1.15rem;font-weight:800;
+            color:#e0e0e0;line-height:1;
+        }
+        .stat-label{
+            font-size:.48rem;color:#777;
+            text-transform:uppercase;letter-spacing:.8px;
+            margin-top:5px;line-height:1.2;
+        }
+
+        /* ===== SECTION LABEL ===== */
+        .section-label{
+            font-size:.58rem;font-weight:700;color:#666;
+            text-transform:uppercase;letter-spacing:2px;
+            margin-bottom:12px;
+            padding-left:2px;
+        }
+
+        /* ===== MENU CARDS ===== */
+        .menu{
+            display:flex;flex-direction:column;gap:10px;
+        }
+        .menu-card{
+            border-radius:12px;
+            padding:18px 18px;
+            cursor:pointer;transition:all .35s ease;
+            text-decoration:none;color:inherit;
+            display:flex;align-items:center;gap:14px;
+            position:relative;overflow:hidden;
+            border:1px solid transparent;
+        }
+        .menu-card::after{
+            content:'›';position:absolute;right:16px;top:50%;
+            transform:translateY(-50%);font-size:1.1rem;
+            color:rgba(255,255,255,.2);transition:all .3s;font-weight:300;
+        }
+        .menu-card:hover{
+            transform:translateX(4px);
+            border-color:rgba(255,255,255,.06);
+        }
+        .menu-card:hover::after{right:12px;color:rgba(255,255,255,.4)}
+        .menu-card:active{transform:translateX(2px)}
+
+        .menu-icon{
+            width:42px;height:42px;border-radius:10px;
+            display:flex;align-items:center;justify-content:center;
+            font-size:1.05rem;flex-shrink:0;
+        }
+        .menu-card-info{display:flex;flex-direction:column;gap:2px}
+        .menu-card-title{
+            font-size:.78rem;font-weight:700;color:#e0e0e0;
+            letter-spacing:.3px;
+        }
+        .menu-card-desc{
+            font-size:.58rem;color:#777;
+            letter-spacing:.2px;line-height:1.4;
+        }
+
+        /* CARD THEMES */
+        .mc-discipulos{background:rgba(74,144,196,.06)}
+        .mc-discipulos .menu-icon{background:rgba(74,144,196,.12);color:var(--blue)}
+        .mc-discipulos:hover{background:rgba(74,144,196,.1)}
+
+        .mc-novo{background:rgba(46,125,50,.06)}
+        .mc-novo .menu-icon{background:rgba(46,125,50,.12);color:#4caf50}
+        .mc-novo:hover{background:rgba(46,125,50,.1)}
+
+        .mc-consolidacao{background:rgba(201,168,76,.05)}
+        .mc-consolidacao .menu-icon{background:rgba(201,168,76,.12);color:var(--gold)}
+        .mc-consolidacao:hover{background:rgba(201,168,76,.08)}
+
+        .mc-historico{background:rgba(255,255,255,.02)}
+        .mc-historico .menu-icon{background:rgba(255,255,255,.06);color:#999}
+        .mc-historico:hover{background:rgba(255,255,255,.04)}
+
+        /* ===== FOOTER ===== */
+        .footer{
+            background:var(--bg2);padding:20px;text-align:center;
+            border-top:1px solid rgba(255,255,255,.04);
+            margin-top:12px;
+        }
+        .footer-verse{color:#666;font-size:.62rem;font-style:italic;line-height:1.7}
+        .footer-ref{color:#888;font-size:.58rem;font-weight:600;margin-top:3px}
+        .footer-ministry{color:#555;font-size:.5rem;margin-top:10px;letter-spacing:2px;text-transform:uppercase}
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeUp{
+            from{opacity:0;transform:translateY(12px)}
+            to{opacity:1;transform:translateY(0)}
+        }
+        .stat-chip{animation:fadeUp .35s ease both}
+        .stat-chip:nth-child(1){animation-delay:.05s}
+        .stat-chip:nth-child(2){animation-delay:.1s}
+        .stat-chip:nth-child(3){animation-delay:.15s}
+        .stat-chip:nth-child(4){animation-delay:.2s}
+        .menu-card{animation:fadeUp .35s ease both}
+        .menu-card:nth-child(1){animation-delay:.12s}
+        .menu-card:nth-child(2){animation-delay:.17s}
+        .menu-card:nth-child(3){animation-delay:.22s}
+        .menu-card:nth-child(4){animation-delay:.27s}
+    </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+    <div class="header-left">
+        <div class="header-logos">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAOCAYAAAC2POVFAAADHklEQVR42q2WW4iVVRTHf+vMaFY0TaJEF3oozQqKtHoqCLtMYBE9dCEFKYrACol5CIMoIjIIil6qh4oeIqGEnIcpYRQCL3Sxh8xgCirKHBPSslIUZs759fI/cPg4M/rQgo9v77XWXvu/LnvtXaqcPnWAFnAAWFpVJ9WBqmr3U1ZbVdXhf6LBOWQCdSoDVdVWh4E7gKuAaWAfsKOq/lJXASPAeFVtVy8G1gI7q2qnugHYW1VbT+mc/akzC7+d/2/qWVl/rfpLH90/1JXqxsxfUs9Qj6m/qv+oByNbrpbayjfYGNdcYGcD3gv2zGzweXhb1HvVNeom9WQcWaY+pq5Qh9SHsu956qPqRZmX2pojqEWfyHXUn9X7+wDugp2K8QsCqp309hpflv+D6ph6TyK7Sh1Xv1Q3q+vCb3XXqa+qO9QJdYN6Tr/ITuf/RGQfqX+rMw2wB5KeYfXfODMRIIt7D5j6ctY8qa7O+Ad1q3ok883Rv1E92thL9Wt1cS/YLqBv1flZ/HgM7A6g6Z4yODs6ow2Hf4+Td0f+XGyvVxeq1zUy8GPWXa1+k/Gb6iL1UnV7eO/3AzsSI0tzUknEbIBd0C38HKR3ezbu0hr1qYyfju5N6jvJxGvqZPZ+JtGcUuf1OLMi8qPdgm4DA8BYVU2E9wDwoTpYVZ8C47O1uqr6rKoeAZYDNwPb0vpGgYVRO6auA3YCtwOHgCuBS6I7lB5+sKqmU8fzotcBziXp7aRWlvR4/3AjXUtSn6r71QXhP6te39BdmShNqq9nzUb1kHqoobst8rXqCfXPRt3flcge7EaqEtlN6iBwIXBYXR+vAWZ69hjI7XUL8CLwgvoJ8FWicF+itC+33Uz408CQeiswmcvhtsgXAR8Dq4Et6ivAMLAx2N44nT7bj6bU+epl6tvpGE36KfLnMx/tqd8uHVbfy3hPusuuPrbeUgeq8Tbo9ER6tjdD921weVWdSKrOB24Arkj0vgd2VdXxnP5rgD1V9Z16Z+bHgQ+q6kgyuL+qxtJvR6LTBr6oqt39LoVTUbvZDVI2s906rbnmfW+pOez8B80BKn5urN90AAAAAElFTkSuQmCC" alt="Sião" style="height:10px">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAWCAYAAAAfD8YZAAACSElEQVR42p3UTYiXVRQG8N/5/18Zm4EYsowkHUiiAsuETMhFX7SIal1Q7VpEtqloUwmGFLipTRHarqkWtigIgjYSSERFZB8EFRJ9UFQ2k4Ohjc7/aXOMWQSBFy73vIdz3/M853m4leQpbMYE5f9XMMJRSeadw0oyP2AhSWFNd08jSH+P+9QdR1W1jMUBQ1UFy//x96qqM6tSk7N5jAcsJ7kQ12IWH+Ia/FhVnye5Dp9W1UqS23Gsqj5OMhpwBmtxAK/gUXyATUkex/2YTrIG93XnfVga9cWf8V5V7cEXeBKv4xYcxmV4v6ruxfe4GqdGOFlVE6w0rxOYxkX4qQe2hEqyvwf2GmZG2JbkMWxNshnX4yrc1JRuxBW4E7fi9yS7saOSvImXcRJf4UocxQU43gj+xq/Ygpme+gOSPHeOJnl+wFSScRtgpflLMoPzsVRVf3VuaANNMDUgraGqmiS5GXc0zz8xm+RrvFNVh5KMui6jnmJhkuQhbOwJ78WhPse4NMmuVQ7716vpostxpB31Edb1+Qk+a733dv14wLG24CLexbP4Jsk67EjySKO5B/uwPcl2LAzt59twoKr+SLINb2AKF+OtlvHuqjqc5Es8iNkBc1joi+ehquqX5vZDVX3XsSTTVbWYZAobB7yKG5LMNef1SbZgwFwjOY312Jnk20Y7P6qqg+3l/djQe2fvTaviDbgEL2G6qg5Wy7UWe9o8x6vqmYb6cFW90PET3TF4GqeqX4t0wS7c1U/SSg/st5b0NN6uqhfPav0P8yQfE96s1pAAAAAASUVORK5CYII=" alt="M12" style="height:14px">
+        </div>
+        <div class="header-info">
+            <div class="header-title" id="dbTitle">Painel do Líder</div>
+            <div class="header-sub" id="dbSubtitle">Gerencie seus discípulos</div>
+        </div>
+    </div>
+    <div class="header-right">
+        <span class="header-user" id="dbUserName">Líder</span>
+        <span class="header-badge" id="dbUserBadge">Sênior</span>
+        <button class="btn-logout" id="btnLogout">Sair</button>
+    </div>
+</div>
+
+<!-- CONTENT -->
+<div class="content">
+
+    <!-- WELCOME -->
+    <div class="welcome">
+        <div class="welcome-hello">Bem-vindo(a)</div>
+        <div class="welcome-name" id="welcomeName">Líder</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-row">
+        <div class="stat-chip">
+            <div class="stat-num" id="statDiscipulos">0</div>
+            <div class="stat-label">Discípulos</div>
+        </div>
+        <div class="stat-chip">
+            <div class="stat-num" id="statDoze">0</div>
+            <div class="stat-label">Meus 12</div>
+        </div>
+        <div class="stat-chip">
+            <div class="stat-num" id="statRede">0</div>
+            <div class="stat-label">Na Rede</div>
+        </div>
+        <div class="stat-chip">
+            <div class="stat-num" id="statModulos">0</div>
+            <div class="stat-label">Módulos</div>
+        </div>
+    </div>
+
+    <!-- MENU -->
+    <div class="section-label">Navegação</div>
+
+    <div class="menu">
+        <a href="meus-discipulos.html" class="menu-card mc-discipulos">
+            <div class="menu-icon">👥</div>
+            <div class="menu-card-info">
+                <div class="menu-card-title">Meus Discípulos</div>
+                <div class="menu-card-desc">Lista, perfil e ações dos seus discípulos</div>
+            </div>
+        </a>
+
+        <a href="gestao-discipulos.html" class="menu-card mc-novo">
+            <div class="menu-icon">➕</div>
+            <div class="menu-card-info">
+                <div class="menu-card-title">Gestão de Discípulos</div>
+                <div class="menu-card-desc">Aprovar, transferir e gerenciar discípulos</div>
+            </div>
+        </a>
+
+        <a href="consolidacao-form.html" class="menu-card mc-consolidacao">
+            <div class="menu-icon">📖</div>
+            <div class="menu-card-info">
+                <div class="menu-card-title">Consolidação</div>
+                <div class="menu-card-desc">Acompanhar módulos e plano de consolidação</div>
+            </div>
+        </a>
+
+        <a href="historico.html" class="menu-card mc-historico">
+            <div class="menu-icon">📋</div>
+            <div class="menu-card-info">
+                <div class="menu-card-title">Histórico</div>
+                <div class="menu-card-desc">Transferências e movimentações realizadas</div>
+            </div>
+        </a>
+    </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+    <div class="footer-verse">"Assim como o ferro afia o ferro, o homem afia o seu companheiro"</div>
+    <div class="footer-ref">Provérbios 27:17</div>
+    <div class="footer-ministry">Ministério Apostólico Sião &nbsp;•&nbsp; Visão Celular M12</div>
+</div>
+
+<script>
+const API = 'https://workflow.autrix.com.br/webhook';
+
+async function api(endpoint, body = {}) {
+    try {
+        const res = await fetch(`${API}/${endpoint}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        return await res.json();
+    } catch (e) {
+        console.error(`Erro API [${endpoint}]:`, e);
+        return null;
+    }
+}
+
+const CONFIG = {
+    maxGeracoes: 5,
+    nomes: { 0:'Sênior', 1:'1ª Geração', 2:'2ª Geração', 3:'3ª Geração', 4:'4ª Geração', 5:'5ª Geração' }
+};
+
+let currentUser = null;
+try {
+    const saved = sessionStorage.getItem('siao_user');
+    if (saved) currentUser = JSON.parse(saved);
+} catch(e) {}
+
+if (currentUser) {
+    document.getElementById('dbUserName').textContent = currentUser.nome;
+    document.getElementById('welcomeName').textContent = currentUser.nome;
+    document.getElementById('dbUserBadge').textContent = CONFIG.nomes[currentUser.geracao] || currentUser.geracao + 'ª Geração';
+    document.getElementById('dbTitle').textContent = currentUser.geracao === 0 ? 'Painel Sênior' : 'Painel do Líder';
+    document.getElementById('dbSubtitle').textContent = currentUser.rede || 'Gerencie seus discípulos';
+    loadStats();
+}
+
+async function loadStats() {
+    if (!currentUser) return;
+    try {
+        const disc = await api('discipulos', { acao: 'listar', lider_id: currentUser.id });
+        const lista = Array.isArray(disc) ? disc.flat() : [];
+        const doze = lista.filter(d => d.usuario_id !== null);
+        const modulosTotal = lista.reduce((acc, d) => acc + (d.modulos || 0), 0);
+
+        document.getElementById('statDiscipulos').textContent = lista.length;
+        document.getElementById('statDoze').textContent = doze.length;
+        document.getElementById('statModulos').textContent = modulosTotal;
+
+        const rede = await api('rede', { lider_id: currentUser.id });
+        const redeList = Array.isArray(rede) ? rede.flat() : [];
+        document.getElementById('statRede').textContent = redeList.length;
+    } catch(e) {
+        console.error('Erro ao carregar stats:', e);
+    }
+}
+
+document.getElementById('btnLogout').addEventListener('click', () => {
+    sessionStorage.removeItem('siao_user');
+    sessionStorage.removeItem('siao_temp_user');
+    window.location.href = 'login.html';
+});
+</script>
+
+</body>
+</html>

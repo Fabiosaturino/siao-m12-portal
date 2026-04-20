@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico — Portal M12</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --bg:#3d3d3d;--bg2:#2d2d2d;--bg3:#353535;
+            --dark:#1a1a1a;--muted:#888;
+            --gold:#c9a84c;--blue:#4a90c4;
+        }
+        body{font-family:'Montserrat',sans-serif;background:var(--bg);min-height:100vh;margin:0;color:#fff}
+
+        .header{background:var(--bg2);padding:14px 20px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,.06);position:sticky;top:0;z-index:100}
+        .header-left{display:flex;align-items:center;gap:10px}
+        .header-logos{display:flex;align-items:center;gap:6px}
+        .header-logos img{opacity:.85}
+        .header-title-area{display:flex;flex-direction:column}
+        .header-title{color:#e0e0e0;font-size:.75rem;font-weight:700;letter-spacing:.8px}
+        .header-sub{color:#666;font-size:.5rem;letter-spacing:.5px;margin-top:1px}
+        .btn-voltar{padding:7px 16px;background:transparent;border:1px solid rgba(255,255,255,.12);color:#888;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:.6rem;font-weight:600;cursor:pointer;letter-spacing:.8px;transition:all .3s;text-transform:uppercase;text-decoration:none}
+        .btn-voltar:hover{border-color:rgba(201,168,76,.3);color:var(--gold)}
+        @media(max-width:600px){.header{padding:10px 14px}}
+
+        .content{max-width:500px;margin:0 auto;padding:16px 14px 40px}
+
+        .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;padding:4px 0}
+        .page-title{font-size:.85rem;font-weight:700;color:#e0e0e0;letter-spacing:.5px}
+        .page-count{font-size:.6rem;color:#777;background:var(--bg2);border:1px solid rgba(255,255,255,.06);padding:4px 10px;border-radius:12px;letter-spacing:.5px}
+
+        /* TRANSFER CARDS */
+        .transfer-list{display:flex;flex-direction:column;gap:8px}
+
+        .transfer-card{
+            background:var(--bg2);
+            border:1px solid rgba(255,255,255,.06);
+            border-radius:12px;
+            padding:16px;
+            transition:all .3s;
+        }
+        .transfer-card:hover{border-color:rgba(255,255,255,.1)}
+
+        .transfer-top{
+            display:flex;align-items:center;justify-content:space-between;
+            margin-bottom:10px;
+        }
+        .transfer-name{font-size:.8rem;font-weight:700;color:#e0e0e0}
+        .transfer-date{font-size:.55rem;color:#777}
+
+        .transfer-flow{
+            display:flex;align-items:center;gap:8px;
+            margin-bottom:8px;
+        }
+        .transfer-leader{
+            padding:5px 10px;border-radius:6px;
+            font-size:.6rem;font-weight:600;
+        }
+        .leader-from{
+            background:rgba(211,47,47,.08);color:#e57373;
+            border:1px solid rgba(211,47,47,.1);
+        }
+        .leader-to{
+            background:rgba(46,125,50,.08);color:#66bb6a;
+            border:1px solid rgba(46,125,50,.1);
+        }
+        .transfer-arrow{
+            color:#666;font-size:.8rem;
+        }
+
+        .transfer-motivo{
+            font-size:.62rem;color:#999;
+            font-style:italic;
+            padding:6px 10px;
+            background:var(--bg3);
+            border-radius:6px;
+            margin-top:6px;
+        }
+        .transfer-motivo:empty{display:none}
+
+        /* EMPTY */
+        .empty-state{text-align:center;padding:60px 20px}
+        .empty-icon{font-size:2rem;margin-bottom:12px;opacity:.3}
+        .empty-text{color:#777;font-size:.78rem;font-weight:600}
+        .empty-sub{color:#555;font-size:.62rem;margin-top:4px}
+
+        .footer{background:var(--bg2);padding:20px;text-align:center;border-top:1px solid rgba(255,255,255,.04);margin-top:12px}
+        .footer-verse{color:#666;font-size:.62rem;font-style:italic;line-height:1.7}
+        .footer-ref{color:#888;font-size:.58rem;font-weight:600;margin-top:3px}
+        .footer-ministry{color:#555;font-size:.5rem;margin-top:10px;letter-spacing:2px;text-transform:uppercase}
+
+        @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+        .transfer-card{animation:fadeUp .35s ease both}
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-left">
+        <div class="header-logos">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACsAAAAOCAYAAAC2POVFAAADHklEQVR42q2WW4iVVRTHf+vMaFY0TaJEF3oozQqKtHoqCLtMYBE9dCEFKYrACol5CIMoIjIIil6qh4oeIqGEnIcpYRQCL3Sxh8xgCirKHBPSslIUZs759fI/cPg4M/rQgo9v77XWXvu/LnvtXaqcPnWAFnAAWFpVJ9WBqmr3U1ZbVdXhf6LBOWQCdSoDVdVWh4E7gKuAaWAfsKOq/lJXASPAeFVtVy8G1gI7q2qnugHYW1VbT+mc/akzC7+d/2/qWVl/rfpLH90/1JXqxsxfUs9Qj6m/qv+oByNbrpbayjfYGNdcYGcD3gv2zGzweXhb1HvVNeom9WQcWaY+pq5Qh9SHsu956qPqRZmX2pojqEWfyHXUn9X7+wDugp2K8QsCqp309hpflv+D6ph6TyK7Sh1Xv1Q3q+vCb3XXqa+qO9QJdYN6Tr/ITuf/RGQfqX+rMw2wB5KeYfXfODMRIIt7D5j6ctY8qa7O+Ad1q3ok883Rv1E92thL9Wt1cS/YLqBv1flZ/HgM7A6g6Z4yODs6ow2Hf4+Td0f+XGyvVxeq1zUy8GPWXa1+k/Gb6iL1UnV7eO/3AzsSI0tzUknEbIBd0C38HKR3ezbu0hr1qYyfju5N6jvJxGvqZPZ+JtGcUuf1OLMi8qPdgm4DA8BYVU2E9wDwoTpYVZ8C47O1uqr6rKoeAZYDNwPb0vpGgYVRO6auA3YCtwOHgCuBS6I7lB5+sKqmU8fzotcBziXp7aRWlvR4/3AjXUtSn6r71QXhP6te39BdmShNqq9nzUb1kHqoobst8rXqCfXPRt3flcge7EaqEtlN6iBwIXBYXR+vAWZ69hjI7XUL8CLwgvoJ8FWicF+itC+33Uz408CQeiswmcvhtsgXAR8Dq4Et6ivAMLAx2N44nT7bj6bU+epl6tvpGE36KfLnMx/tqd8uHVbfy3hPusuuPrbeUgeq8Tbo9ER6tjdD921weVWdSKrOB24Arkj0vgd2VdXxnP5rgD1V9Z16Z+bHgQ+q6kgyuL+qxtJvR6LTBr6oqt39LoVTUbvZDVI2s906rbnmfW+pOez8B80BKn5urN90AAAAAElFTkSuQmCC" alt="Sião" style="height:10px">
+            <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA8AAAAWCAYAAAAfD8YZAAACSElEQVR42p3UTYiXVRQG8N/5/18Zm4EYsowkHUiiAsuETMhFX7SIal1Q7VpEtqloUwmGFLipTRHarqkWtigIgjYSSERFZB8EFRJ9UFQ2k4Ohjc7/aXOMWQSBFy73vIdz3/M853m4leQpbMYE5f9XMMJRSeadw0oyP2AhSWFNd08jSH+P+9QdR1W1jMUBQ1UFy//x96qqM6tSk7N5jAcsJ7kQ12IWH+Ia/FhVnye5Dp9W1UqS23Gsqj5OMhpwBmtxAK/gUXyATUkex/2YTrIG93XnfVga9cWf8V5V7cEXeBKv4xYcxmV4v6ruxfe4GqdGOFlVE6w0rxOYxkX4qQe2hEqyvwf2GmZG2JbkMWxNshnX4yrc1JRuxBW4E7fi9yS7saOSvImXcRJf4UocxQU43gj+xq/Ygpme+gOSPHeOJnl+wFSScRtgpflLMoPzsVRVf3VuaANNMDUgraGqmiS5GXc0zz8xm+RrvFNVh5KMui6jnmJhkuQhbOwJ78WhPse4NMmuVQ7716vpostxpB31Edb1+Qk+a733dv14wLG24CLexbP4Jsk67EjySKO5B/uwPcl2LAzt59twoKr+SLINb2AKF+OtlvHuqjqc5Es8iNkBc1joi+ehquqX5vZDVX3XsSTTVbWYZAobB7yKG5LMNef1SbZgwFwjOY312Jnk20Y7P6qqg+3l/djQe2fvTaviDbgEL2G6qg5Wy7UWe9o8x6vqmYb6cFW90PET3TF4GqeqX4t0wS7c1U/SSg/st5b0NN6uqhfPav0P8yQfE96s1pAAAAAASUVORK5CYII=" alt="M12" style="height:14px">
+        </div>
+        <div class="header-title-area">
+            <div class="header-title">Histórico</div>
+            <div class="header-sub">Transferências e movimentações</div>
+        </div>
+    </div>
+    <a href="dashboard.html" class="btn-voltar">Voltar</a>
+</div>
+
+<div class="content">
+    <div class="page-header">
+        <div class="page-title">Transferências</div>
+        <div class="page-count" id="pageCount">0 registros</div>
+    </div>
+
+    <div class="transfer-list" id="transferList"></div>
+
+    <div class="empty-state" id="emptyState" style="display:none">
+        <div class="empty-icon">&#128203;</div>
+        <div class="empty-text">Nenhuma transferência registrada</div>
+        <div class="empty-sub">Quando houver movimentações, elas aparecerão aqui</div>
+    </div>
+</div>
+
+<div class="footer">
+    <div class="footer-verse">"Assim como o ferro afia o ferro, o homem afia o seu companheiro"</div>
+    <div class="footer-ref">Provérbios 27:17</div>
+    <div class="footer-ministry">Ministério Apostólico Sião &nbsp;•&nbsp; Visão Celular M12</div>
+</div>
+
+<script>
+const API = 'https://workflow.autrix.com.br/webhook';
+
+async function api(endpoint, body = {}) {
+    try {
+        const res = await fetch(API + '/' + endpoint, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(body)
+        });
+        return await res.json();
+    } catch (e) {
+        console.error('Erro API [' + endpoint + ']:', e);
+        return null;
+    }
+}
+
+let currentUser = null;
+try { var s = sessionStorage.getItem('siao_user'); if(s) currentUser = JSON.parse(s); } catch(e) {}
+
+function formatDate(d) {
+    if (!d) return '—';
+    try {
+        var dt = new Date(d);
+        return dt.toLocaleDateString('pt-BR', { day:'2-digit', month:'2-digit', year:'numeric' });
+    } catch(e) { return d; }
+}
+
+async function loadHistorico() {
+    if (!currentUser) {
+        document.getElementById('emptyState').style.display = 'block';
+        return;
+    }
+
+    // Busca histórico via Supabase (endpoint a criar amanhã na infra)
+    // Por enquanto tenta buscar direto
+    var result = await api('historico', { lider_id: currentUser.id });
+    var lista = Array.isArray(result) ? result.flat() : [];
+
+    var container = document.getElementById('transferList');
+    var empty = document.getElementById('emptyState');
+    var count = document.getElementById('pageCount');
+
+    if (lista.length === 0) {
+        container.innerHTML = '';
+        empty.style.display = 'block';
+        count.textContent = '0 registros';
+        return;
+    }
+
+    empty.style.display = 'none';
+    count.textContent = lista.length + ' registro' + (lista.length !== 1 ? 's' : '');
+
+    // Ordena por data mais recente
+    lista.sort(function(a, b) {
+        return new Date(b.created_at || 0) - new Date(a.created_at || 0);
+    });
+
+    container.innerHTML = lista.map(function(t, i) {
+        var motivo = t.motivo ? '<div class="transfer-motivo">' + t.motivo + '</div>' : '';
+        return '<div class="transfer-card" style="animation-delay:' + (i * 0.04) + 's">' +
+            '<div class="transfer-top">' +
+                '<div class="transfer-name">' + (t.discipulo_nome || '—') + '</div>' +
+                '<div class="transfer-date">' + formatDate(t.created_at) + '</div>' +
+            '</div>' +
+            '<div class="transfer-flow">' +
+                '<div class="transfer-leader leader-from">' + (t.lider_origem_nome || '—') + '</div>' +
+                '<div class="transfer-arrow">&#10132;</div>' +
+                '<div class="transfer-leader leader-to">' + (t.lider_destino_nome || '—') + '</div>' +
+            '</div>' +
+            motivo +
+        '</div>';
+    }).join('');
+}
+
+loadHistorico();
+</script>
+
+</body>
+</html>
